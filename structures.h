@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
 // coordinates of any location (origin or destination or worker's current location) 
-typedef struct coordinates{
+typedef struct coordinate{
 		int x, y;
-}coordinates;
+}coordinate;
 
 
 /** let worker be w = < ow, cw > 
@@ -12,8 +12,9 @@ typedef struct coordinates{
 		cw = capacity of worker **/ 
 
 typedef struct worker{
-		coordinates start;
+		coordinate current_location;
 		int capacity;
+		int picked_up;
 }worker;
 
 
@@ -26,26 +27,47 @@ typedef struct worker{
  		cr = capacity of request  **/
 
 typedef struct request{
-		coordinates origin, destination;
+		coordinate origin, destination;
 		double release_time, deadline_time;
 		int capacity;
 }request;
 
+//Set of requests
+typedef struct set_of_requests{
+	request **arr;
+}set_of_requests;
 
 // route is defined as set of location of origin and destination 
 // below structure is node for route
 typedef struct location_node{
-		coordinates sequenced_location;
+		coordinate sequenced_location;
 		struct location_node *next_location_node;
+		request *corresponding_request;
 }location_node;
 
 typedef location_node *route;
 
-void init_route(route *r, coordinates worker);
-double delivery_time(route r);
-double flow_time();
+void init_route(route *r, coordinate worker);
+void add_location_in_route(route *r, request rq, int flag);
+double arrival_time(route r, coordinate l);
+double flow_time(route r, request rq);
+double time_between_node(coordinate n1, coordinate n2);
+int is_route_feasible(route r, worker w);
 void insertion_operator(int index, coordinates c, route *r);
-double find_objective();
-int check_deadline_constraint();
-int check_capacity_constraint();
+//double find_objective();
+int check_deadline_constraint(route r, location_node l, worker w);
+int check_capacity_constraint(route r, location_node l, worker w);
 		
+
+
+
+
+
+
+
+
+
+
+
+
+
