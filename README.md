@@ -1,2 +1,3 @@
-Dynamic Ridesharing Insertion Operator Implementation.
-Using segment 
+#Dynamic Ridesharing Insertion Operator Implementation.
+
+##Implementation of Algorithm 1 - Brute Force Algorithm
