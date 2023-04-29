@@ -2,7 +2,7 @@
 
 // coordinates of any location (origin or destination or worker's current location) 
 typedef struct coordinate{
-		int x, y;
+		double x, y;
 }coordinate;
 
 
@@ -39,24 +39,31 @@ typedef struct set_of_requests{
 
 // route is defined as set of location of origin and destination 
 // below structure is node for route
+// isOrigin - 0 - destination, 1 - origin, -1 - neither origin nor destination
 typedef struct location_node{
 		coordinate sequenced_location;
 		struct location_node *next_location_node;
 		request *corresponding_request;
+		int isOrigin;
 }location_node;
 
-typedef location_node *route;
+typedef location_node * route;
 
 void init_route(route *r, coordinate worker);
-void add_location_in_route(route *r, request rq, int flag);
+void add_location_in_route(route *r, request *rq, int flag);
 double arrival_time(route r, coordinate l);
 double flow_time(route r, request rq);
-double time_between_node(coordinate n1, coordinate n2);
-int is_route_feasible(route r, worker w);
-void insertion_operator(int index, coordinates c, route *r);
+double time_between_nodes(coordinate n1, coordinate n2);
+/*int is_route_feasible(route r, worker w);
+void insertion_operator(route *r, worker w, request rq);
 //double find_objective();
 int check_deadline_constraint(route r, location_node l, worker w);
-int check_capacity_constraint(route r, location_node l, worker w);
+int check_capacity_constraint(route r, location_node l, worker w);*/
+void display_route(route );
+void insertion_operator(route , worker, request *);
+double calculate_objective(route, double);
+int constrain_satisfy(route, worker, double);
+route findCurrentLocation(route, worker *, request *);
 		
 
 
