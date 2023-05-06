@@ -34,7 +34,7 @@ double dis(location_node *a, location_node *b){
 }
 
 // arr(k) (arrival time) - it will be time from origin to current node
-double arr(location_node *k){
+double arr(location_node *k, route r){
 		int arr_time;
 		arr_time = dis(r.path, k);   // route means from worker to k
 		arr_time += k->corresponding_request->release_time;
@@ -44,18 +44,20 @@ double arr(location_node *k){
 // ddl(k) function - latest time to arrive at lk without violating the deadline constraints
 double ddl(location_node *k){
 		double total_time;
-		if(k->corresponding_request->origin == k->sequenced_location){
-				total_time = k->corresponding_request->deadline_time - dis(k, k->corresponding_request->destination);
+		k_request = k->corresponding_request;
+
+		if(k_request->origin == k->sequenced_location){
+				total_time = k_request->deadline_time - dis(k_request->origin, k_request->destination);
 		}
-		else if(k->corresponding_request->destination == k->sequenced_location){
-				total_time = k->corresponding_request->deadline_time;
+		else if(k_request->destination == k->sequenced_location){
+				total_time = k_request->deadline_time;
 		}
 		return total_time;
 }
 				
 // find min value between num1 and num2
 double min(double num1, double num2){
-		return (num1 > num2 ? num1 : num2);
+		return (num1 > num2 ? num2 : num1);
 }
 
 // slk_intermediate
@@ -88,18 +90,21 @@ int check_deadline_constraint(double *slk, int i, int j, location_node *or, loca
 		// first condition
 		if(det(i, or) > slk[i])
 				return 0;
-		// second condition
+
 		if(i != j){
+				// second condition
 				if(det(i, or) + det(j, dr) > slk[j])
 						return 0;
 				else{
+						// third condition
 						if(arr(j) + det(li, or) + dis(lj, dr) > dr->corresponding_request->deadline_time)
 								return 0;
 						else
 								return 1;
 				}
 		}
-		else
+		else{
+				// second condition
 				if(dis(li, or) + dis(or, dr) + dis(dr, li>location_node) - dis(li, li->next_location_node) > slk[i])
 						return 0;
 				else{
@@ -109,6 +114,7 @@ int check_deadline_constraint(double *slk, int i, int j, location_node *or, loca
 						else
 								return 1;
 				}
+		}
 }
 
 // insertion of a node after b 
@@ -125,7 +131,7 @@ void insertion_operator(double *pck, double *slk, location_node *or, location_no
 		location_node *li, *lj;    // this pointer will itterate through loops
 		location_node *origin_i, *dest_j;    // this pointer is address of that node after which or and dr will get inserted
 		li = r.path;
-		lj = lj->next_location_node;
+		lj = li->next_location_node;
 		for(int i = 0; i < r.no_of_nodes; i++){
 				for(int j = i; j < r.no_of_nodes; j++){
 						if(check_capacity_constraint() && check_deadline_constraint(slk, i, j, or, dr, li, lj)){
