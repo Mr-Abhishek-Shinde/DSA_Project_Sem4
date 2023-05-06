@@ -29,3 +29,11 @@ typedef location_node *route;
 
 void pre_calculate_pck(route r, int *pck_values);
 int check_capacity_constraint(route r, worker w, request new_rq, int i, int j);
+double time_between_nodes(coordinate n1, coordinate n2);
+double arrival_time(route r, coordinate l);
+double flow_time(route r, request rq);
+void mobj(route r, double **mobj_values);
+
+double dis(location_node *a, location_node *b);
+double arr(location_node *k);
+double det(location_node *k, location_node *p);
