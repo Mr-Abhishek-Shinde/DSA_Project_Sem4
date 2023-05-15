@@ -86,7 +86,7 @@ void slk_intermediate(double *slk, location_node *n, int k){
 
 // main slake time function
 // slk(k)(slake time) - maximum tolerable time for detour after lk
-void slk_time(double *slk){
+void slk_time(route r, double *slk){
 		dis_from_origin[0] = 0;
 		slk[r.no_of_nodes] = 0;
 		int k = 0;
@@ -149,6 +149,63 @@ void insert(location_node *a, location_node *b){
 // pck()
 
 
+void scale_vector(coordinate unit_vector, double scale, coordinate *result){
+		(*result).x = unit_vector.x * scale;
+		(*result).y = unit_vector.y * scale;
+		return;
+}
+
+void add_vector(coordinate a, coordinate b, coordinate *result){
+		(*result).x = a.x + b.x;
+		(*result).y = a.y + b.y;
+		return;
+}
+
+void update_index_and_dis(route r){
+		location_node *temp = r.path;
+		int i = 1;
+		dis_from_origin[i] = 0;
+		while(temp && temp->next_location_node){
+				temp->index = i - 1;
+				dis_from_origin[i] = distance(temp->sequenced_location, temp->next_location_node->sequenced_location) + dis_from_origin[i-1];
+				i++;
+				temp = temp->next_location_node;
+		}
+		temp->next_location_node->index = i - 1;
+		return;
+}
+
+void find_unit_vector(coordinate a, coordinate b, coordinate *result){
+		double magnitude = distance(a, b); 
+		result->x = (b.x - a.x) / magnitude;
+		result->y = (b.x - a.x) / magnitude;
+		return;
+}
+
+void update_worker_route(route r, worker w, request *new_request){
+		location_node *a= r.path, *b = NULL;
+		coordinate unit_vector_ab, scaled_vector_ab;
+		double d, dis = 0;
+		while(1){
+				dis = distance(a->sequenced_location, a->next_location_node->sequenced_location) + dis;
+				if(dis >= new_request->release_time){
+						break;
+				}
+				a = a->next_location_node;
+		}
+		b = a->next_location_node;
+		find_unit_vector(a->sequenced_location, b->sequenced_location, &unit_vector_ab);
+		d = new_request->release_time - a->corresponding_request->release_time;
+		scale_vector(unit_vector_ab, d, &scaled_vector_ab);
+		add_vector(a->sequenced_location, scaled_vector_ab, &w.current_location);
+
+		location_node *start_node = (r.path);
+		start_node->next_location_node = a;
+		
+		// update route
+		update_index_and_dis(r);
+		return;
+}	
 
 // precalculation
 void pre_calculation(route r){
@@ -158,8 +215,8 @@ void pre_calculation(route r){
 		for(int i = 0; i < r.no_of_nodes; i++){
 			mobj_values[i] = (double*)malloc(sizeof(double*)*r.no_of_nodes);	
 		}
-		slk_time(slk_values);
-		pck(pck_values);
+		slk_time(r, slk_values);
+		pck(r, pck_values);
 		mobj(mobj_values);
 }
 
@@ -167,7 +224,7 @@ void pre_calculation(route r){
 void insertion_operator(route r, worker w, request new_request){
 		double OBJ_MIN = DBL_MAX, OBJ_NEW;
 		location_node *li, *lj;    // this pointer will itterate through loops
-		location_node *origin_i, *dest_j;    // this pointer is address of that node after which or and dr will get inserted
+		location_node *origin_i = NULL, *dest_j = NULL;    // this pointer is address of that node after which or and dr will get inserted
 		li = r.path;
 		lj = li;
 

@@ -53,7 +53,7 @@ typedef struct route{
 double dis(location_node *a, location_node *b);
 double arr(location_node *k);
 double ddl(location_node *k);
-void slk_time(double *slk);
+void slk_time(route r, double *slk);
 void slk_intermediate(double *slk, location_node *n, int k); 
 
 // helping functions
