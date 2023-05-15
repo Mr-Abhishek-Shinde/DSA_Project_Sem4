@@ -3,41 +3,26 @@
 #include <math.h>
 #include "structures.h"
 
-// Helper function:
-int get_route_size(route r){
-	int k = 0;
-	route p = r;
-        while(p){
-                k++;
-                p = p->next_location_node;
-        }
-
-	return k;
-}
-
 // Function to precalculate pck values of all the locations:
 // pck(k) is defined as the number of requests picked but not delivered after w arrives at lk
 int *pck_values;
 
 void pre_calculate_pck(route r, int *pck_values){
-	int size_of_route = get_route_size(r);
-
-	pck_values = (int *)malloc(sizeof(int) * size_of_route);
-
 	pck_values[0] = 0;
 
-	route p = r->next_location_node;
+	location_node *p = r.path->next_location_node;
 	int i = 1;
 	int pck_k = pck_values[0];
+
 	request *req;
 	
 	while(p){
 		req = p->corresponding_request;
 
-		if((p->sequenced_location.x == req->origin.x) && (p->sequenced_location.y == req->origin.y)){
+		if(p == req->or){
 			pck_k += req->capacity;
 		}
-		else if((p->sequenced_location.x == req->destination.x) && (p->sequenced_location.y == req->destination.y)){
+		else if(p == req->dr){
 			pck_k -= req->capacity;
 		}
 
@@ -50,8 +35,8 @@ void pre_calculate_pck(route r, int *pck_values){
 }
 
 // Function to check if capacity constraint is violated:
-int check_capacity_constraint(route r, worker w, request new_rq, int i, int j){
-	int c = (w.capacity - new_rq.capacity);
+int check_capacity_constraint(worker w, request new_request, int i, int j){
+	int c = (w.capacity - new_request.capacity);
 	
 	int result;
 
@@ -71,17 +56,17 @@ int check_capacity_constraint(route r, worker w, request new_rq, int i, int j){
 
 	return result;
 }
-			
+				
 // Helper functions:
 double time_between_nodes(coordinate n1, coordinate n2){
-        double time_squared = ((n1.x - n2.x) * (n1.x - n2.x)) + ((n1.y - n2.y) * (n1.y - n2.y));
-        return sqrt(time_squared);
+	double time_squared = ((n1.x - n2.x) * (n1.x - n2.x)) + ((n1.y - n2.y) * (n1.y - n2.y));
+	return sqrt(time_squared);
 }
 
 double arrival_time(route r, coordinate l){
-        double time = 0;
-        location_node *prev = r;
-        location_node *curr = r->next_location_node;
+	double time = 0;
+	location_node *prev = r.path;
+	location_node *curr = r.path->next_location_node;
         
 	while(((prev->sequenced_location).x != l.x) || ((prev->sequenced_location).y != l.y)){
                 time += time_between_nodes(prev->sequenced_location, curr->sequenced_location);
@@ -93,7 +78,7 @@ double arrival_time(route r, coordinate l){
 }
 
 double flow_time(route r, request rq){
-        double arr_destination = arrival_time(r, rq.destination);
+        double arr_destination = arrival_time(r, rq.dr->sequenced_location);
         return arr_destination - rq.release_time;
 }
 
@@ -103,18 +88,11 @@ int max(int a, int b){
 
 // precalculating mobj:
 void mobj(route r, double **mobj_values){
-	int size_of_route = get_route_size(r);
-	mobj_values = (double **)malloc(sizeof(double*) * size_of_route);
-
-	for(int i = 0; i < size_of_route; i++){
-		mobj_values[i] = (double *)malloc(sizeof(double) * size_of_route);
-	}
-
 	double ft_curr = 0;
 
-	route q, p = r;
+	location_node *q, *p = r.path;
 	for(int i = 0; p != NULL; i++, p = p->next_location_node){
-		q = r;
+		q = r.path;
 		
 		for(int j = 0; q != NULL ; j++, q = q->next_location_node){
 			if(i > j){
@@ -124,7 +102,7 @@ void mobj(route r, double **mobj_values){
 				mobj_values[i][j] = 0;
 			}
 			else{
-				if((q->sequenced_location.x == q->corresponding_request->destination.x) && (q->sequenced_location.y == q->corresponding_request->destination.y)){
+				if(q == q->corresponding_request->dr){ //check if q is a destination
 					ft_curr = flow_time(r, *(q->corresponding_request));
 				}
 				else{
@@ -135,10 +113,8 @@ void mobj(route r, double **mobj_values){
 			}
 		}
 	}
-
 	return;
 }
-
 
 // Functions to calculate the objective:
 double max_of_mf(double mf1, double mf2, double mf3, double mf4){
@@ -157,9 +133,11 @@ double max_of_mf(double mf1, double mf2, double mf3, double mf4){
 	return max_mf;
 }
 
-double obj(route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, request *new_rq, location_node *or, location_node *dr){
+double obj(route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, request *new_rq){
 	double mf1, mf2, mf3, mf4;
-	int n = get_route_size(r);
+	int n = r.no_of_nodes;
+	location_node *or = new_rq->or;
+	location_node *dr = new_rq->dr;
 
 	mf1 = mobj_values[0][i];
 
@@ -177,8 +155,5 @@ double obj(route r, int i, int j, location_node *li, location_node *lj, double *
 
 	return max_of_mf(mf1, mf2, mf3, mf4);
 }
-
-
-
 
 
