@@ -27,7 +27,7 @@ typedef struct worker{
  		cr = capacity of request  **/
 
 typedef struct request{
-		coordinate origin, destination;
+		struct location_node *origin, *destination;
 		double release_time, deadline_time;
 		int capacity;
 }request;
