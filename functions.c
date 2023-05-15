@@ -98,6 +98,7 @@ void insertion_operator(route r, worker w, request *rq){
 			if(constrain_satisfy(r_new, w, rq->release_time)){
 				printf("Inside constraint\n");
 				obj = calculate_objective(r_new, rq->release_time);
+				printf("--------Objective - count %d- %lf----------\n", count, obj);
 				if(obj < obj_min){
 					printf("objective - %lf\n", obj);
 					l_final = l;
