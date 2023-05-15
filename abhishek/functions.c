@@ -62,9 +62,10 @@ int check_capacity_constraint(route r, worker w, request new_rq, int i, int j){
 		return 0;
 	}
 
-	for(int k = i + 1; k < j; k++){
+	for(int k = i + 1; k <= j; k++){
 		if(pck_values[k] > c){
 			result = 0;
+			break;
 		}
 	}
 
@@ -103,36 +104,36 @@ int max(int a, int b){
 // precalculating mobj:
 void mobj(route r, double **mobj_values){
 	int size_of_route = get_route_size(r);
-	mobj_values = (double **)malloc(sizeof(double*) * (size_of_route + 1));
+	mobj_values = (double **)malloc(sizeof(double*) * size_of_route);
 
-	for(int i = 0; i <= size_of_route + 1; i++){
-		mobj_values[i] = (double *)malloc(sizeof(double) * (size_of_route + 1));
+	for(int i = 0; i < size_of_route; i++){
+		mobj_values[i] = (double *)malloc(sizeof(double) * size_of_route);
 	}
 
-	int ft_curr_rq = 0;
+	double ft_curr = 0;
 
-	route p = r;
-	for(int i = 0; p != NULL; i++){
-		route q = r;
+	route q, p = r;
+	for(int i = 0; p != NULL; i++, p = p->next_location_node){
+		q = r;
 		
-		for(int j = 0; q != NULL ; j++){
-			if(i > j - 1){
+		for(int j = 0; q != NULL ; j++, q = q->next_location_node){
+			if(i > j){
 				mobj_values[i][j] = INT_MAX;
+			}
+			else if( i == 0 &&  j == 0){
+				mobj_values[i][j] = 0;
 			}
 			else{
 				if((q->sequenced_location.x == q->corresponding_request->destination.x) && (q->sequenced_location.y == q->corresponding_request->destination.y)){
-					ft_curr_rq = flow_time(r, *(q->corresponding_request));
+					ft_curr = flow_time(r, *(q->corresponding_request));
 				}
 				else{
-					ft_curr_rq = 0;
+					ft_curr = 0;
 				}
 			 
-				mobj_values[i][j] = max(mobj_values[i][j-1], ft_curr_rq);
+				mobj_values[i][j] = max(mobj_values[i][j-1], ft_curr);
 			}
-
-			q = q->next_location_node;
 		}
-		p = p->next_location_node;
 	}
 
 	return;
@@ -140,8 +141,8 @@ void mobj(route r, double **mobj_values){
 
 
 // Functions to calculate the objective:
-double max_of_mf(float mf1, float mf2, float mf3, float mf4){
-	float max_mf = mf1;
+double max_of_mf(double mf1, double mf2, double mf3, double mf4){
+	double max_mf = mf1;
 
 	if(mf2 > max_mf){
 		max_mf = mf2;
@@ -156,28 +157,23 @@ double max_of_mf(float mf1, float mf2, float mf3, float mf4){
 	return max_mf;
 }
 
-double obj(route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, request new_rq){
+double obj(route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, request *new_rq, location_node *or, location_node *dr){
 	double mf1, mf2, mf3, mf4;
 	int n = get_route_size(r);
 
-	// malloc two location nodes for origin and destination of new request:
-	location_node *new_origin = (location_node *)malloc(sizeof(location_node));
-	new_origin->sequenced_location = new_rq.origin;
-	new_origin->next_location_node = NULL;
-	new_origin->corresponding_request = &new_rq;
-
-	location_node *new_destination = (location_node *)malloc(sizeof(location_node));
-	new_destination->sequenced_location = new_rq.destination;
-        new_destination->next_location_node = NULL;
-        new_destination->corresponding_request = &new_rq;
-
 	mf1 = mobj_values[0][i];
 
-	mf2 = det(li, new_origin) + mobj_values[i + 1][j];
+	if(i == j){
+		mf2 = 0;
+		mf3 = dis(li, or) + dis(or, dr) + dis(dr, li->next_location_node) - dis(li, li->next_location_node) + mobj_values[i + 1][n];
+		mf4 = arr(li) + dis(li, or) + dis(or, dr) - new_rq->release_time;
+	}
+	else{
+		mf2 = det(li, or) + mobj_values[i + 1][j];
+		mf3 = det(li, or) + det(lj, dr) + mobj_values[j + 1][n];
+		mf4 = arr(lj) + det(li, or) + dis(lj, dr) - new_rq->release_time;
+	}
 
-	mf3 = det(li, new_origin) + det(lj, new_destination) + mobj_values[j + 1][n];
-
-	mf4 = arr(li) + dis(li, new_origin) + dis(new_origin, new_destination);
 
 	return max_of_mf(mf1, mf2, mf3, mf4);
 }
