@@ -1,8 +1,12 @@
 #include <math.h>
-#include "route.h"
-#include "request.h"
+#include <stdlib.h>
+#include <float.h>
+#include "structures.h"
 
 route r;
+double *slk_values;
+double *pck_values;
+double **mobj_values;
 
 // a raise to b - a^b
 double a_raise_b(double a, double b){
@@ -27,16 +31,23 @@ double dis(location_node *a, location_node *b){
 		double dis = 0;
 		location_node *temp = a;
 		while(temp != b->next_location_node){
-				dis += distance(a->sequenced_location, a->next_location_node);
+				dis += distance(a->sequenced_location, a->next_location_node->sequenced_location);
 				temp = temp->next_location_node;
 		}
 		return dis;
 }
 
+double dis_from_origin[20];
+
+// distance between given index
+double dis_index(location_node *a, location_node *b){
+		return (dis_from_origin[a->index] - dis_from_origin[b->index]);
+}
+
 // arr(k) (arrival time) - it will be time from origin to current node
-double arr(location_node *k, route r){
+double arr(location_node *k){
 		int arr_time;
-		arr_time = dis(r.path, k);   // route means from worker to k
+		arr_time = dis_index(r.path, k);   // route means from worker to k
 		arr_time += k->corresponding_request->release_time;
 		return arr_time;
 }
@@ -44,12 +55,14 @@ double arr(location_node *k, route r){
 // ddl(k) function - latest time to arrive at lk without violating the deadline constraints
 double ddl(location_node *k){
 		double total_time;
-		k_request = k->corresponding_request;
+		request *k_request = k->corresponding_request;
 
-		if(k_request->origin == k->sequenced_location){
-				total_time = k_request->deadline_time - dis(k_request->origin, k_request->destination);
+		//if((k_request->or.x == k->sequenced_location.x) && (k_request->or.y == k->sequenced_location.y)){
+		if(k_request->or == k){
+			//	total_time = k_request->deadline_time - dis(k_request->or, k_request->dr);
+				total_time = k_request->deadline_time - dis_index(k, k_request->dr);
 		}
-		else if(k_request->destination == k->sequenced_location){
+		else if(k_request->dr == k){
 				total_time = k_request->deadline_time;
 		}
 		return total_time;
@@ -60,10 +73,12 @@ double min(double num1, double num2){
 		return (num1 > num2 ? num2 : num1);
 }
 
+
 // slk_intermediate
 void slk_intermediate(double *slk, location_node *n, int k){
 		if(k == r.no_of_nodes)
 				return;
+		dis_from_origin[k+1] = distance(n->sequenced_location, n->next_location_node->sequenced_location) + dis_from_origin[k]; // it will find the distance from origin to kth node
 		slk_intermediate(slk, n->next_location_node, k+1);
 		slk[k] = min(slk[k+1], ddl(n->next_location_node) - arr(n->next_location_node));
 		return;
@@ -72,6 +87,7 @@ void slk_intermediate(double *slk, location_node *n, int k){
 // main slake time function
 // slk(k)(slake time) - maximum tolerable time for detour after lk
 void slk_time(double *slk){
+		dis_from_origin[0] = 0;
 		slk[r.no_of_nodes] = 0;
 		int k = 0;
 		slk_intermediate(slk, r.path, k);
@@ -81,23 +97,23 @@ void slk_time(double *slk){
 // det(k, p) - the detour time of inserting location p after lk
 double det(location_node *k, location_node *p){
 		double detour;
-		detour = dis(k, p) + dis(p, k->location_node) - dis(k, k->location_node);
+		detour = dis(k, p) + dis(p, k->next_location_node) - dis(k, k->next_location_node);
 		return detour;
 }
 
 // check deadline constraints
 int check_deadline_constraint(double *slk, int i, int j, location_node *or, location_node *dr, location_node *li, location_node *lj){
 		// first condition
-		if(det(i, or) > slk[i])
+		if(det(li, or) > slk[i])
 				return 0;
 
 		if(i != j){
 				// second condition
-				if(det(i, or) + det(j, dr) > slk[j])
+				if(det(li, or) + det(lj, dr) > slk[j])
 						return 0;
 				else{
 						// third condition
-						if(arr(j) + det(li, or) + dis(lj, dr) > dr->corresponding_request->deadline_time)
+						if(arr(lj) + det(li, or) + dis(lj, dr) > dr->corresponding_request->deadline_time)
 								return 0;
 						else
 								return 1;
@@ -105,17 +121,18 @@ int check_deadline_constraint(double *slk, int i, int j, location_node *or, loca
 		}
 		else{
 				// second condition
-				if(dis(li, or) + dis(or, dr) + dis(dr, li>location_node) - dis(li, li->next_location_node) > slk[i])
+				if(dis(li, or) + dis(or, dr) + dis(dr, li->next_location_node) - dis(li, li->next_location_node) > slk[i])
 						return 0;
 				else{
 						// third condition cheking
-						if(arr(li) + dis(li, or) + dis(or, dr) > slk(i) > dr->corresponding_request->deadline_time)
+						//if(arr(li) + dis(li, or) + dis(or, dr) > slk[i] > dr->corresponding_request->deadline_time)
+						if(arr(li) + dis(li, or) + dis(or, dr) > dr->corresponding_request->deadline_time)
 								return 0;
 						else
 								return 1;
 				}
 		}
-}
+} 
 
 // insertion of a node after b 
 void insert(location_node *a, location_node *b){
@@ -125,40 +142,61 @@ void insert(location_node *a, location_node *b){
 		return;
 }
 
+
+// precalculation functions
+// mobj()
+
+// pck()
+
+
+
+// precalculation
+void pre_calculation(route r){
+		slk_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
+		pck_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
+		mobj_values = (double**)malloc(sizeof(double*)*r.no_of_nodes);
+		for(int i = 0; i < r.no_of_nodes; i++){
+			mobj_values[i] = (double*)malloc(sizeof(double*)*r.no_of_nodes);	
+		}
+		slk_time(slk_values);
+		pck(pck_values);
+		mobj(mobj_values);
+}
+
 // insertion operator
-void insertion_operator(double *pck, double *slk, location_node *or, location_node *dr){
-		double OBJ_MIN = INT_MAX, OBJ;
+void insertion_operator(route r, worker w, request new_request){
+		double OBJ_MIN = DBL_MAX, OBJ_NEW;
 		location_node *li, *lj;    // this pointer will itterate through loops
 		location_node *origin_i, *dest_j;    // this pointer is address of that node after which or and dr will get inserted
 		li = r.path;
-		lj = li->next_location_node;
-		for(int i = 0; i < r.no_of_nodes; i++){
-				for(int j = i; j < r.no_of_nodes; j++){
-						if(check_capacity_constraint() && check_deadline_constraint(slk, i, j, or, dr, li, lj)){
-								// compute mf1, mf2, mf3, mf4
-								
-								// OBJ = max(mf1, mf2, mf3, mf4)
+		lj = li;
+
+		// precalculation
+		pre_calculation(r);
+		for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
+				for(int j = i; j < r.no_of_nodes; j++, lj = lj->next_location_node){
+						if(check_capacity_constraint(r, w, new_request, i, j) && check_deadline_constraint(slk_values, i, j, new_request.or, new_request.dr, li, lj)){
+
+								// OBJ_NEW = max(mf1, mf2, mf3, mf4)
+								OBJ_NEW = Compute_OBJ_NEW(r, i , j li, lj, mobj_values, new_request); 
 
 								// update (i*, j*) with (i, j) according to OBJ
-								if(OBJ_MIN > OBJ){
+								if(OBJ_MIN > OBJ_NEW){
 										origin_i = li;
-										origin_j = lj;
-										OBJ_MIN = OBJ;
+										dest_j = lj;
+										OBJ_MIN = OBJ_NEW;
 								}
 						}
-						lj = lj->next_location_node;
-						
 				}
-				li = li->next_location_node;
 		}
 		// insert node after li and lj
-		insert(or, origin_i);
-		insert(dr, destination_j);
-		or->index = r.no_of_nodes + 1;
-		dr->index = r.no_of_nodes + 2;
+		insert(new_request.or, origin_i);
+		insert(new_request.dr, dest_j);
+		new_request.or->index = r.no_of_nodes + 1;
+		new_request.dr->index = r.no_of_nodes + 2;
 		r.no_of_nodes += 2;
 		return;
-}
+} 
 
 // I have to write the function for precalculation of arr(k), ddl(k), dis(k)
 // - but affter every insertion we have to update whole array of arr(k) and also ddl(k), dis(k)
