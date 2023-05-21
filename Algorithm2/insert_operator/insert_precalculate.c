@@ -5,28 +5,53 @@
 #include <stdlib.h>
 #include <float.h>
 
+void update_route(route r, worker w, location_node *before_worker){
+    location_node *traversal = r.path, *tmp = NULL;
+
+    while(traversal == before_worker){
+        tmp = traversal;
+        free(tmp);
+        traversal  = traversal->next_location_node;
+    }
+
+    w.current_location->next_location_node = traversal->next_location_node;
+
+    free(traversal);
+    return;
+}
+
 void update_worker_route(route r, worker w, request *new_request){
-		location_node *a= r.path, *b = NULL;
-		coordinate unit_vector_ab, scaled_vector_ab;
-		double d, dis = 0;
-		while(1){
-				dis = distance(a->sequenced_location, a->next_location_node->sequenced_location) + dis;
-				if(dis >= new_request->release_time){
+
+        // here a and b are nodes between which our new locaton of worker will lie
+		location_node *a, *b = NULL;
+		coordinate unit_vector_ab, scaled_vector_aw;
+		double scale_aw, distance;
+
+        a = r.path;
+        distance = 0;
+        
+		while(a->next_location_node){
+				distance += distance(a->sequenced_location, a->next_location_node->sequenced_location);
+				if(distance >= new_request->release_time){
 						break;
 				}
 				a = a->next_location_node;
 		}
-		b = a->next_location_node;
-		find_unit_vector(a->sequenced_location, b->sequenced_location, &unit_vector_ab);
-		d = new_request->release_time - a->corresponding_request->release_time;
-		scale_vector(unit_vector_ab, d, &scaled_vector_ab);
-		add_vector(a->sequenced_location, scaled_vector_ab, &w.current_location);
 
-		location_node *start_node = (r.path);
-		start_node->next_location_node = a;
-		
+        if(!a->next_location_node){
+            w.current_location = a;
+            return;
+        }
+
+		b = a->next_location_node;
+
+		find_unit_vector(&unit_vector_ab, a->sequenced_location, b->sequenced_location);
+		scale_aw = new_request->release_time - a->corresponding_request->release_time;
+		scale_vector(&scaled_vector_aw, unit_vector_ab, scaled_vector_aw);
+		add_vector(&w.current_location, a->sequenced_location, scaled_vector_ab);
+
 		// update route
-		/* update_index_and_dis(r); */
+        update_route(r, w, a);
 		return;
 }	
 
@@ -41,6 +66,7 @@ void pre_calculation(route r, double *slk_values, double *pck_values, double **m
 		slk_time(r, slk_values);
 		pre_calculate_pck(r, pck_values);
 		mobj(r, mobj_values);
+        return;
 }
 
 // insertion operator

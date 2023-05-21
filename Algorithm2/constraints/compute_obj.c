@@ -11,7 +11,7 @@ double time_between_nodes(coordinate n1, coordinate n2){
 	return sqrt(time_squared);
 }
 
-double arrival_time(route r, coordinate l){
+/** double arrival_time(Route r, coordinate l){
 	double time = 0;
 	location_node *prev = r.path;
 	location_node *curr = r.path->next_location_node;
@@ -23,16 +23,16 @@ double arrival_time(route r, coordinate l){
         }
         
 	return time;
-}
+} **/
 
-double flow_time(route r, request rq){
+double flow_time(Route r, Request rq){
         double arr_destination = arrival_time(r, rq.destination->sequenced_location);
         return arr_destination - rq.release_time;
 }
 
 
 // precalculating mobj:
-void mobj(route r, double **mobj_values){
+void mobj(Route r, double **mobj_values){
 	double ft_curr = 0;
 
 	location_node *q, *p = r.path;
@@ -78,7 +78,7 @@ double max_of_mf(double mf1, double mf2, double mf3, double mf4){
 	return max_mf;
 }
 
-double obj(route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, request *new_rq){
+double obj(Route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, Request *new_rq){
 	double mf1, mf2, mf3, mf4;
 	int n = r.no_of_nodes;
 	location_node *or = new_rq->origin;

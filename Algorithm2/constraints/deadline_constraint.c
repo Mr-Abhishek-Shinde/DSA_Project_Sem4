@@ -2,7 +2,7 @@
 #include "constraints.h"
 #include "mathematics.h"
 
-extern route r;
+extern Route r;
 
 #define NNODE (sizeof(r.path) / sizeof(int))
 
@@ -11,7 +11,7 @@ int dis_from_origin[NNODE];
 // ddl(k) function - latest time to arrive at lk without violating the deadline constraints
 double ddl(location_node *k){
 		double total_time;
-		request *k_request = k->corresponding_request;
+		Request *k_request = k->corresponding_request;
 
 		//if((k_request->origin.x == k->sequenced_location.x) && (k_request->origin.y == k->sequenced_location.y)){
 		if(k_request->origin == k){
@@ -25,10 +25,12 @@ double ddl(location_node *k){
 }
 				
 // slk_intermediate
-void slk_intermediate(route r, double *slk, location_node *n, int k){
+void slk_intermediate(Route r, double *slk, location_node *n, int k){
 		if(k == r.no_of_nodes)
 				return;
 		dis_from_origin[k+1] = distance(n->sequenced_location, n->next_location_node->sequenced_location) + dis_from_origin[k]; // it will find the distance from origin to kth node
+        n->index = k;
+
 		slk_intermediate(r, slk, n->next_location_node, k+1);
 		slk[k] = min(slk[k+1], ddl(n->next_location_node) - arr(r, n->next_location_node));
 		return;
@@ -36,7 +38,7 @@ void slk_intermediate(route r, double *slk, location_node *n, int k){
 
 // main slake time function
 // slk(k)(slake time) - maximum tolerable time for detour after lk
-void slk_time(route r, double *slk){
+void slk_time(Route r, double *slk){
 		dis_from_origin[0] = 0;
 		slk[r.no_of_nodes] = 0;
 		int k = 0;
@@ -52,9 +54,9 @@ double det(location_node *k, location_node *p){
 }
 
 // arr(k) (arrival time) - it will be time from origin to current node
-double arr(route r, location_node *k){
+double arr(Route r, location_node *k){
 		int arr_time;
-		arr_time = dis_index(r.path, k);   // route means from worker to k
+		arr_time = dis_index(r.path, k);   // Route means from Worker to k
 		arr_time += k->corresponding_request->release_time;
 		return arr_time;
 }
@@ -68,7 +70,7 @@ void insert(location_node *a, location_node *b){
 }
 
 // check deadline constraints
-int check_deadline_constraint(route r, double *slk, int i, int j, location_node *origin, location_node *destination, location_node *li, location_node *lj){
+int check_deadline_constraint(Route r, double *slk, int i, int j, location_node *origin, location_node *destination, location_node *li, location_node *lj){
 		// first condition
 		if(det(li, origin) > slk[i])
 				return 0;

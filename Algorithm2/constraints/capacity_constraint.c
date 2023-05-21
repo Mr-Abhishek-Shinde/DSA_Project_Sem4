@@ -1,13 +1,13 @@
 #include "structures.h"
 
-void pre_calculate_pck(route r, double *pck_values){
+void pre_calculate_pck(Route r, double *pck_values){
 	pck_values[0] = 0;
 
 	location_node *p = r.path->next_location_node;
 	int i = 1;
 	double pck_k = pck_values[0];
 
-	request *req;
+	Request *req;
 	
 	while(p){
 		req = p->corresponding_request;
@@ -27,8 +27,8 @@ void pre_calculate_pck(route r, double *pck_values){
 	return;
 }
 
-int check_capacity_constraint(worker w, request new_request, double *pck_values, int i, int j){
-	int c = (w.capacity - new_request.capacity);
+int check_capacity_constraint(Worker worker, Request new_request, double *pck_values, int i, int j){
+	int c = (worder.capacity - new_request.capacity);
 	
 	int result;
 
