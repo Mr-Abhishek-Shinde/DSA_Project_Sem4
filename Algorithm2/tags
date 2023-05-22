@@ -55,64 +55,68 @@ CONSTRAINTS	include/constraints.h	/^#define CONSTRAINTS$/;"	d
 MATH	tools/mathematics.c	/^#define MATH$/;"	d	file:
 MATHEMATICS	include/mathematics.h	/^#define MATHEMATICS /;"	d
 NNODE	constraints/deadline_constraint.c	/^#define NNODE /;"	d	file:
+NNODES	insert_operator/insert_precalculate.c	/^#define NNODES /;"	d	file:
+Request	include/structures.h	/^typedef struct Request{$/;"	s
+Request	include/structures.h	/^}Request; $/;"	t	typeref:struct:Request
+RideSharing_State	include/ridesharing.h	/^typedef struct RideSharing_State{$/;"	s
+Ridesharing_State	include/ridesharing.h	/^}Ridesharing_State;$/;"	t	typeref:struct:RideSharing_State
+Route	include/structures.h	/^typedef struct Route{$/;"	s
+Route	include/structures.h	/^}Route; $/;"	t	typeref:struct:Route
 STRUCTURES	include/structures.h	/^#define STRUCTURES /;"	d
+Set_of_requests	include/structures.h	/^typedef struct Set_of_requests{$/;"	s
+Set_of_requests	include/structures.h	/^}Set_of_requests; $/;"	t	typeref:struct:Set_of_requests
+Worker	include/structures.h	/^typedef struct Worker{$/;"	s
+Worker	include/structures.h	/^}Worker; $/;"	t	typeref:struct:Worker
 a_raise_b	tools/mathematics.c	/^double a_raise_b(double a, double b){$/;"	f	typeref:typename:double
 add_vector	tools/mathematics.c	/^void add_vector(coordinate a, coordinate b, coordinate *result){$/;"	f	typeref:typename:void
-arr	constraints/deadline_constraint.c	/^double arr(route r, location_node *k){$/;"	f	typeref:typename:double
-arr	include/structures.h	/^	request *arr;$/;"	m	struct:set_of_requests	typeref:typename:request *
-capacity	include/structures.h	/^		int capacity;$/;"	m	struct:request	typeref:typename:int
-capacity	include/structures.h	/^		int capacity;$/;"	m	struct:worker	typeref:typename:int
-check_capacity_constraint	constraints/capacity_constraint.c	/^int check_capacity_constraint(worker w, request new_request, double *pck_values, int i, int j){$/;"	f	typeref:typename:int
-check_deadline_constraint	constraints/deadline_constraint.c	/^int check_deadline_constraint(route r, double *slk, int i, int j, location_node *origin, locatio/;"	f	typeref:typename:int
+arr	constraints/deadline_constraint.c	/^double arr(Route r, location_node *k){$/;"	f	typeref:typename:double
+arr	include/structures.h	/^	Request *arr;$/;"	m	struct:Set_of_requests	typeref:typename:Request *
+capacity	include/structures.h	/^		int capacity;$/;"	m	struct:Request	typeref:typename:int
+capacity	include/structures.h	/^		int capacity;$/;"	m	struct:Worker	typeref:typename:int
+check_capacity_constraint	constraints/capacity_constraint.c	/^int check_capacity_constraint(Worker worker, Request new_request, double *pck_values, int i, int/;"	f	typeref:typename:int
+check_deadline_constraint	constraints/deadline_constraint.c	/^int check_deadline_constraint(Route r, double *slk, int i, int j, location_node *origin, locatio/;"	f	typeref:typename:int
 coordinate	include/structures.h	/^typedef struct coordinate{$/;"	s
 coordinate	include/structures.h	/^}coordinate;$/;"	t	typeref:struct:coordinate
-corresponding_request	include/structures.h	/^		struct request *corresponding_request;$/;"	m	struct:location_node	typeref:struct:request *
-current_location	include/structures.h	/^		coordinate current_location;$/;"	m	struct:worker	typeref:typename:coordinate
+corresponding_request	include/structures.h	/^		struct Request *corresponding_request;$/;"	m	struct:location_node	typeref:struct:Request *
+current_location	include/structures.h	/^		coordinate current_location;$/;"	m	struct:Worker	typeref:typename:coordinate
 ddl	constraints/deadline_constraint.c	/^double ddl(location_node *k){$/;"	f	typeref:typename:double
-deadline_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:request	typeref:typename:double
-destination	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:request	typeref:struct:location_node *
+deadline_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:Request	typeref:typename:double
+destination	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:Request	typeref:struct:location_node *
 det	constraints/deadline_constraint.c	/^double det(location_node *k, location_node *p){$/;"	f	typeref:typename:double
 dis	tools/mathematics.c	/^double dis(location_node *a, location_node *b){$/;"	f	typeref:typename:double
 dis_from_origin	constraints/deadline_constraint.c	/^int dis_from_origin[NNODE];$/;"	v	typeref:typename:int[]
-dis_index	tools/mathematics.c	/^double dis_index(location_node *a, location_node *b){$/;"	f	typeref:typename:double
+dis_index	constraints/deadline_constraint.c	/^double dis_index(location_node *a, location_node *b){$/;"	f	typeref:typename:double
 distance	tools/mathematics.c	/^double distance(coordinate a, coordinate b){$/;"	f	typeref:typename:double
 find_unit_vector	tools/mathematics.c	/^void find_unit_vector(coordinate a, coordinate b, coordinate *result){$/;"	f	typeref:typename:void
-flow_time	constraints/compute_obj.c	/^double flow_time(route r, request rq){$/;"	f	typeref:typename:double
+flow_time	constraints/compute_obj.c	/^double flow_time(Route r, Request rq){$/;"	f	typeref:typename:double
 index	include/structures.h	/^		int index;    \/\/ it is for simplicity for precalculation - basically it is index of node$/;"	m	struct:location_node	typeref:typename:int
+init_Ridesharing_State	insert_operator/ridesharing.c	/^void init_Ridesharing_State(RideSharing_State *ridesharing_state){$/;"	f	typeref:typename:void
 insert	constraints/deadline_constraint.c	/^void insert(location_node *a, location_node *b){$/;"	f	typeref:typename:void
-insertion_operator	insert_operator/insert_precalculate.c	/^void insertion_operator(route r, worker w, request *new_request){$/;"	f	typeref:typename:void
+insert	insert_operator/insert_precalculate.c	/^void insert(Ridesharing_State *ridesharing_state){$/;"	f	typeref:typename:void
 location_node	include/structures.h	/^typedef struct location_node{$/;"	s
 location_node	include/structures.h	/^}location_node; $/;"	t	typeref:struct:location_node
 main	main.c	/^int main(){$/;"	f	typeref:typename:int
 max	tools/mathematics.c	/^int max(int a, int b){$/;"	f	typeref:typename:int
 max_of_mf	constraints/compute_obj.c	/^double max_of_mf(double mf1, double mf2, double mf3, double mf4){$/;"	f	typeref:typename:double
 min	tools/mathematics.c	/^double min(double num1, double num2){$/;"	f	typeref:typename:double
-mobj	constraints/compute_obj.c	/^void mobj(route r, double **mobj_values){$/;"	f	typeref:typename:void
+mobj	constraints/compute_obj.c	/^void mobj(Route r, double **mobj_values){$/;"	f	typeref:typename:void
 next_location_node	include/structures.h	/^		struct location_node *next_location_node;$/;"	m	struct:location_node	typeref:struct:location_node *
-no_of_nodes	include/structures.h	/^		int no_of_nodes;$/;"	m	struct:route	typeref:typename:int
-obj	constraints/compute_obj.c	/^double obj(route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, re/;"	f	typeref:typename:double
-origin	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:request	typeref:struct:location_node *
-path	include/structures.h	/^		location_node *path;$/;"	m	struct:route	typeref:typename:location_node *
-picked_up	include/structures.h	/^		int picked_up;$/;"	m	struct:worker	typeref:typename:int
-pre_calculate_pck	constraints/capacity_constraint.c	/^void pre_calculate_pck(route r, double *pck_values){$/;"	f	typeref:typename:void
-pre_calculation	insert_operator/insert_precalculate.c	/^void pre_calculation(route r, double *slk_values, double *pck_values, double **mobj_values){$/;"	f	typeref:typename:void
-r	main.c	/^route r;$/;"	v	typeref:typename:route
-release_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:request	typeref:typename:double
-request	include/structures.h	/^typedef struct request{$/;"	s
-request	include/structures.h	/^}request; $/;"	t	typeref:struct:request
-route	include/structures.h	/^typedef struct route{$/;"	s
-route	include/structures.h	/^}route; $/;"	t	typeref:struct:route
+no_of_nodes	include/structures.h	/^		int no_of_nodes;$/;"	m	struct:Route	typeref:typename:int
+obj	constraints/compute_obj.c	/^double obj(Route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, Re/;"	f	typeref:typename:double
+origin	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:Request	typeref:struct:location_node *
+path	include/structures.h	/^		location_node *path;$/;"	m	struct:Route	typeref:typename:location_node *
+picked_up	include/structures.h	/^		int picked_up;$/;"	m	struct:Worker	typeref:typename:int
+pre_calculate_pck	constraints/capacity_constraint.c	/^void pre_calculate_pck(Route r, double *pck_values){$/;"	f	typeref:typename:void
+release_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:Request	typeref:typename:double
+ridesharing_state	main.c	/^Ridesharing_State ridesharing_state;$/;"	v	typeref:typename:Ridesharing_State
+route	include/ridesharing.h	/^    Route route;$/;"	m	struct:RideSharing_State	typeref:typename:Route
 scale_vector	tools/mathematics.c	/^void scale_vector(coordinate unit_vector, double scale, coordinate *result){$/;"	f	typeref:typename:void
 sequenced_location	include/structures.h	/^		coordinate sequenced_location;$/;"	m	struct:location_node	typeref:typename:coordinate
-set_of_requests	include/structures.h	/^typedef struct set_of_requests{$/;"	s
-set_of_requests	include/structures.h	/^}set_of_requests; $/;"	t	typeref:struct:set_of_requests
-size	include/structures.h	/^	int size;$/;"	m	struct:set_of_requests	typeref:typename:int
-slk_intermediate	constraints/deadline_constraint.c	/^void slk_intermediate(route r, double *slk, location_node *n, int k){$/;"	f	typeref:typename:void
-slk_time	constraints/deadline_constraint.c	/^void slk_time(route r, double *slk){$/;"	f	typeref:typename:void
+set_of_requests	include/ridesharing.h	/^    Set_of_requests set_of_requests;$/;"	m	struct:RideSharing_State	typeref:typename:Set_of_requests
+size	include/structures.h	/^	int size;$/;"	m	struct:Set_of_requests	typeref:typename:int
+slk_intermediate	constraints/deadline_constraint.c	/^void slk_intermediate(Route r, double *slk, location_node *n, int k){$/;"	f	typeref:typename:void
+slk_time	constraints/deadline_constraint.c	/^void slk_time(Route r, double *slk){$/;"	f	typeref:typename:void
 time_between_nodes	constraints/compute_obj.c	/^double time_between_nodes(coordinate n1, coordinate n2){$/;"	f	typeref:typename:double
-update_route	insert_operator/insert_precalculate.c	/^void update_route(route r, worker w, location_node *before_worker){$/;"	f	typeref:typename:void
-update_worker_route	insert_operator/insert_precalculate.c	/^void update_worker_route(route r, worker w, request *new_request){$/;"	f	typeref:typename:void
-worker	include/structures.h	/^typedef struct worker{$/;"	s
-worker	include/structures.h	/^}worker; $/;"	t	typeref:struct:worker
+worker	include/ridesharing.h	/^    Worker worker;$/;"	m	struct:RideSharing_State	typeref:typename:Worker
 x	include/structures.h	/^		int x, y;$/;"	m	struct:coordinate	typeref:typename:int
 y	include/structures.h	/^		int x, y;$/;"	m	struct:coordinate	typeref:typename:int

@@ -1,9 +1,41 @@
-#include "structures.h"
 #include "mobj.h"
 #include "mathematics.h"
 #include "constraints.h"
 #include <stdlib.h>
 #include <float.h>
+
+#define CAPACITY (4)
+#define NNODES (6)
+
+void insert_coordinate(location_node *l, int x, int y){
+    l->sequenced_location->x = x;
+    l->sequenced_location->y = y;
+    return;
+}
+
+void insert_node(Ridesharing_State *ridesharing_state, Request request, location_node *l, int index){
+
+    location_node *path = ridesharing_state->route.path;
+
+    if(!path){
+         ridesharing_state->route.path = l;
+         path = ridesharing_state->route.path;
+         ridesharing_state->route.path->next_location_node = NULL;
+         ridesharing_state->route.path->corresponding_request  = request;
+         ridesharing_state->route.no_of_nodes++;
+         return;
+    }
+
+    path->next_location_node = l;
+    path = next_location_node;
+    path->next_location_node = NULL;
+    path->corresponding_request = request;
+    ridesharing_state->route.no_of_nodes++;
+    path->index = index;
+
+    return;
+}
+
 
 void update_route(route r, worker w, location_node *before_worker){
     location_node *traversal = r.path, *tmp = NULL;

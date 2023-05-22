@@ -8,6 +8,11 @@ extern Route r;
 
 int dis_from_origin[NNODE];
 
+// distance between given index
+double dis_index(location_node *a, location_node *b){
+		return (dis_from_origin[a->index] - dis_from_origin[b->index]);
+}
+
 // ddl(k) function - latest time to arrive at lk without violating the deadline constraints
 double ddl(location_node *k){
 		double total_time;

@@ -20,7 +20,7 @@ double distance(coordinate a, coordinate b){
 		return distance;
 }
 
-// this functions will find the distance between a and b node in route
+// this functions will find the distance between a and b node in Route
 double dis(location_node *a, location_node *b){
 		double dis = 0;
 		location_node *temp = a;
@@ -29,11 +29,6 @@ double dis(location_node *a, location_node *b){
 				temp = temp->next_location_node;
 		}
 		return dis;
-}
-
-// distance between given index
-double dis_index(location_node *a, location_node *b){
-		return (dis_from_origin[a->index] - dis_from_origin[b->index]);
 }
 
 // find min value between num1 and num2

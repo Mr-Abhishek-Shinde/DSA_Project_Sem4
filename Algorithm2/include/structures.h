@@ -4,11 +4,6 @@
 
 #define STRUCTURES 
 
-typedef struct RideSharing_State{
-    Route route;
-    Set_of_request set_of_requests;
-    Worker worker;
-}Ridesharing_State;
 
 // coordinates of any location (origin or destination or worker's current location) 
 typedef struct coordinate{
