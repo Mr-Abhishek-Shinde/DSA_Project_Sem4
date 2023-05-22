@@ -69,10 +69,12 @@ void display_route(route r){
 	return;
 }
 
-void insertion_operator(route r, worker w, request *rq){
+route insertion_operator(route r, worker w, request *rq){
 	int count = 0;
 	route r_new = findCurrentLocation(r, &w, rq);
-	printf("worker pickup - %d, worker capacity - %d\n", w.picked_up, w.capacity);
+	printf("----Displaying new route----\n");
+	display_route(r_new);
+//	printf("worker pickup - %d, worker capacity - %d\n", w.picked_up, w.capacity);
 	location_node *rq_origin = (location_node *)malloc(sizeof(location_node));
 	location_node *rq_destination = (location_node *)malloc(sizeof(location_node));
 
@@ -96,18 +98,18 @@ void insertion_operator(route r, worker w, request *rq){
 			rq_destination->next_location_node = d->next_location_node;
 			d->next_location_node = rq_destination;
 			if(constrain_satisfy(r_new, w, rq->release_time)){
-				printf("Inside constraint\n");
+//				printf("Inside constraint\n");
 				obj = calculate_objective(r_new, rq->release_time);
-				printf("--------Objective - count %d- %lf----------\n", count, obj);
+//				printf("--------Objective - count %d- %lf----------\n", count, obj);
 				if(obj < obj_min){
-					printf("objective - %lf\n", obj);
+//					printf("objective - %lf\n", obj);
 					l_final = l;
 					d_final = d;
 					obj_min = obj;
 				}
 			}
 			else{
-				printf("count - %d\n", count);
+//				printf("count - %d\n", count);
 			}
 			d->next_location_node = rq_destination->next_location_node;
 			d = d->next_location_node;
@@ -121,7 +123,7 @@ void insertion_operator(route r, worker w, request *rq){
 		rq_destination->next_location_node = d_final->next_location_node;
 		d_final->next_location_node = rq_destination;
 	}
-	return;
+	return r_new;
 }
 
 route findCurrentLocation(route r, worker *w, request *rq){
@@ -174,19 +176,19 @@ int constrain_satisfy(route r, worker w, double initial_time){
 		time += time_between_nodes(p->sequenced_location, n->sequenced_location);
 		if(n->isOrigin == 1){
 			pickup += n->corresponding_request->capacity;
-			printf("pickup inside origin- %d\n", pickup);
+//			printf("pickup inside origin- %d\n", pickup);
 			if(pickup > w.capacity){
-				printf("Returning 0 capacity constraint count no of interations - %d\n, pickup - %d, capacity - %d\n", count, pickup, w.capacity);
+//				printf("Returning 0 capacity constraint count no of interations - %d\n, pickup - %d, capacity - %d\n", count, pickup, w.capacity);
 				return 0;
 			}
 		}
 		else if(n->isOrigin == 0){
 			if(time > n->corresponding_request->deadline_time){
-				printf("Returning 0 deadline constraint\n");
+//				printf("Returning 0 deadline constraint\n");
 				return 0;
 			}
 			pickup -= n->corresponding_request->capacity;
-			printf("pickup inside destination- %d\n", pickup);
+//			printf("pickup inside destination- %d\n", pickup);
 		}
 		p = n;
 		n = n->next_location_node;

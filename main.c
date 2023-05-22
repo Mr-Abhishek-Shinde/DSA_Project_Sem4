@@ -45,8 +45,8 @@ int main(){
 	add_location_in_route(&r, &rq3, 1);
 	add_location_in_route(&r, &rq2, 1);
 	display_route(r);
-	insertion_operator(r, w, &rq_new);
+	r = insertion_operator(r, w, &rq_new);
 	display_route(r);
-	printf("sum flow time - %lf\n", calculate_objective(r, 0));
+	printf("sum flow time - %lf\n", calculate_objective(r, rq_new.release_time));
 	return 0;
 }

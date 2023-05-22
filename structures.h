@@ -60,7 +60,7 @@ void insertion_operator(route *r, worker w, request rq);
 int check_deadline_constraint(route r, location_node l, worker w);
 int check_capacity_constraint(route r, location_node l, worker w);*/
 void display_route(route );
-void insertion_operator(route , worker, request *);
+route insertion_operator(route , worker, request *);
 double calculate_objective(route, double);
 int constrain_satisfy(route, worker, double);
 route findCurrentLocation(route, worker *, request *);
