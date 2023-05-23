@@ -12,6 +12,7 @@ GCC   	= gcc
 MAIN.c 	= main.c
 -C      = -c
 -O 		= -o
+-LM   	= -lm
 
 # which purticular type of file to search from purticular directory
 vpath %.c src/constraints
@@ -21,7 +22,7 @@ vpath %.h include
 
 # main target
 result: capacity_constraint.o compute_obj.o deadline_constraint.o insert_precalculate.o ridesharing.o mathematics.o main.c
-	$(GCC) $(FLAGS) $^ $(-O) $@
+	$(GCC) $(FLAGS) $^ $(-LM) $(-O) $@
 
 capacity_constraint.o: capacity_constraint.c 
 compute_obj.o: compute_obj.c
@@ -31,7 +32,7 @@ ridesharing.o: ridesharing.c
 mathematics.o: mathematics.c
 
 %.o: %.c
-	$(GCC) $(FLAGS) $(-C) $<
+	$(GCC) $(FLAGS) $(-LM) $(-C) $<
 
 .PHONY: clean
 clean:

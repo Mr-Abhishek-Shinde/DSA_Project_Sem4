@@ -4,9 +4,10 @@
 
 #include "structures.h"
 
+double time_between_nodes(coordinate n1, coordinate n2);
 void pre_calculate_pck(Route route, double *pck_values);
 double ddl(location_node *k);
-void slk_intermediate(Route route, double *slk, location_node *n, int k);
+void slk_intermediate(Route r, double *slk, location_node *n, int k);
 void slk_time(Route route, double *slk);
 double arr(Route route, location_node *k);
 void insert(location_node *a, location_node *b);

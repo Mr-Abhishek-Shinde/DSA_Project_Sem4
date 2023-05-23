@@ -11,22 +11,8 @@ double time_between_nodes(coordinate n1, coordinate n2){
 	return sqrt(time_squared);
 }
 
-/** double arrival_time(Route r, coordinate l){
-	double time = 0;
-	location_node *prev = r.path;
-	location_node *curr = r.path->next_location_node;
-        
-	while(((prev->sequenced_location).x != l.x) || ((prev->sequenced_location).y != l.y)){
-                time += time_between_nodes(prev->sequenced_location, curr->sequenced_location);
-                prev = curr;
-                curr = curr->next_location_node;
-        }
-        
-	return time;
-} **/
-
 double flow_time(Route r, Request rq){
-        double arr_destination = arrival_time(r, rq.destination->sequenced_location);
+        double arr_destination = arr(r, rq.destination);
         return arr_destination - rq.release_time;
 }
 

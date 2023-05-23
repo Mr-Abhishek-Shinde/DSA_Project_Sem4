@@ -32,7 +32,7 @@ double ddl(location_node *k){
 void slk_intermediate(Route r, double *slk, location_node *n, int k){
 		if(k == r.no_of_nodes)
 				return;
-		dis_from_origin[k+1] = distance(n->sequenced_location, n->next_location_node->sequenced_location) + dis_from_origin[k]; // it will find the distance from origin to kth node
+		dis_from_origin[k+1] = distance_node(n->sequenced_location, n->next_location_node->sequenced_location) + dis_from_origin[k]; // it will find the distance from origin to kth node
         n->index = k;
 
 		slk_intermediate(r, slk, n->next_location_node, k+1);

@@ -57,9 +57,9 @@ void update_route(Route r, Worker *w, location_node *before_worker){
 void update_worker_route(Route r, Worker *w, Request *new_request){
 
         // here a and b are nodes between which our new locaton of worker will lie
-		location_node *a, *b = NULL;
-		coordinate unit_vector_ab, scaled_vector_aw;
-		double scale_aw, distance;
+	location_node *a, *b = NULL;
+	coordinate unit_vector_ab, scaled_vector_aw;
+	double scale_aw, distance;
 
         a = r.path;
         distance = 0;
