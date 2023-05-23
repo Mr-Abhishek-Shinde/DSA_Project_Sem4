@@ -1,3 +1,4 @@
+#include "ridesharing.h"
 #include "mobj.h"
 #include "mathematics.h"
 #include "constraints.h"
@@ -7,13 +8,13 @@
 #define CAPACITY (4)
 #define NNODES (6)
 
-void insert_coordinate(location_node *l, int x, int y){
-    l->sequenced_location->x = x;
-    l->sequenced_location->y = y;
+void insert_coordinate(location_node *l, double x, double y){
+    l->sequenced_location.x = x;
+    l->sequenced_location.y = y;
     return;
 }
 
-void insert_node(Ridesharing_State *ridesharing_state, Request request, location_node *l, int index){
+void insert_node(RideSharing_State *ridesharing_state, Request *request, location_node *l, int index){
 
     location_node *path = ridesharing_state->route.path;
 
@@ -27,7 +28,7 @@ void insert_node(Ridesharing_State *ridesharing_state, Request request, location
     }
 
     path->next_location_node = l;
-    path = next_location_node;
+    path = path->next_location_node;
     path->next_location_node = NULL;
     path->corresponding_request = request;
     ridesharing_state->route.no_of_nodes++;
@@ -37,7 +38,7 @@ void insert_node(Ridesharing_State *ridesharing_state, Request request, location
 }
 
 
-void update_route(route r, worker w, location_node *before_worker){
+void update_route(Route r, Worker *w, location_node *before_worker){
     location_node *traversal = r.path, *tmp = NULL;
 
     while(traversal == before_worker){
@@ -46,13 +47,14 @@ void update_route(route r, worker w, location_node *before_worker){
         traversal  = traversal->next_location_node;
     }
 
-    w.current_location->next_location_node = traversal->next_location_node;
+    r.path->sequenced_location = w->current_location;
+    r.path->next_location_node = traversal->next_location_node;
 
     free(traversal);
     return;
 }
 
-void update_worker_route(route r, worker w, request *new_request){
+void update_worker_route(Route r, Worker *w, Request *new_request){
 
         // here a and b are nodes between which our new locaton of worker will lie
 		location_node *a, *b = NULL;
@@ -63,7 +65,7 @@ void update_worker_route(route r, worker w, request *new_request){
         distance = 0;
         
 		while(a->next_location_node){
-				distance += distance(a->sequenced_location, a->next_location_node->sequenced_location);
+				distance += distance_node(a->sequenced_location, a->next_location_node->sequenced_location);
 				if(distance >= new_request->release_time){
 						break;
 				}
@@ -71,7 +73,7 @@ void update_worker_route(route r, worker w, request *new_request){
 		}
 
         if(!a->next_location_node){
-            w.current_location = a;
+            w->current_location = a->sequenced_location;
             return;
         }
 
@@ -79,8 +81,8 @@ void update_worker_route(route r, worker w, request *new_request){
 
 		find_unit_vector(&unit_vector_ab, a->sequenced_location, b->sequenced_location);
 		scale_aw = new_request->release_time - a->corresponding_request->release_time;
-		scale_vector(&scaled_vector_aw, unit_vector_ab, scaled_vector_aw);
-		add_vector(&w.current_location, a->sequenced_location, scaled_vector_ab);
+		scale_vector(&scaled_vector_aw, unit_vector_ab, scale_aw);
+		add_vector(&w->current_location, a->sequenced_location, scaled_vector_aw);
 
 		// update route
         update_route(r, w, a);
@@ -88,7 +90,7 @@ void update_worker_route(route r, worker w, request *new_request){
 }	
 
 // precalculation
-void pre_calculation(route r, double *slk_values, double *pck_values, double **mobj_values){
+void pre_calculation(Route r, double *slk_values, double *pck_values, double **mobj_values){
 		slk_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
 		pck_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
 		mobj_values = (double**)malloc(sizeof(double*)*r.no_of_nodes);
@@ -102,7 +104,7 @@ void pre_calculation(route r, double *slk_values, double *pck_values, double **m
 }
 
 // insertion operator
-void insertion_operator(route r, worker w, request *new_request){
+void insertion_operator(Route r, Worker w, Request *new_request){
 		double OBJ_MIN = DBL_MAX, OBJ_NEW;
         double *slk_values = NULL, *pck_values = NULL, **mobj = NULL;
 		location_node *li, *lj;    // this pointer will itterate through loops

@@ -1,7 +1,12 @@
+#include <stdlib.h>
 #include "ridesharing.h"
 
 void init_Ridesharing_State(RideSharing_State *ridesharing_state){
-    ridesharing_state->route.path = NULL;
+
+    ridesharing_state->route.path = (location_node*)malloc(sizeof(location_node));
+    ridesharing_state->route.path->next_location_node = NULL;
+    ridesharing_state->route.path->corresponding_request = NULL;
+    ridesharing_state->route.path->index = 0;
     ridesharing_state->route.no_of_nodes = 0;
 
     ridesharing_state->worker.current_location.x = 0;

@@ -1,4 +1,3 @@
-#include "structures.h"
 #include "constraints.h"
 #include "mathematics.h"
 

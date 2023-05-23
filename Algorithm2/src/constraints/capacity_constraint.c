@@ -1,4 +1,4 @@
-#include "structures.h"
+#include "constraints.h"
 
 void pre_calculate_pck(Route r, double *pck_values){
 	pck_values[0] = 0;
@@ -28,7 +28,7 @@ void pre_calculate_pck(Route r, double *pck_values){
 }
 
 int check_capacity_constraint(Worker worker, Request new_request, double *pck_values, int i, int j){
-	int c = (worder.capacity - new_request.capacity);
+	int c = (worker.capacity - new_request.capacity);
 	
 	int result;
 
