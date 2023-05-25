@@ -33,8 +33,8 @@ int main(){
 	rq3.capacity = 1;
 	rq_new.origin.x = 4;
 	rq_new.origin.y = 6;
-	rq_new.destination.x = 6;
-	rq_new.destination.y = 2;
+	rq_new.destination.x = 9;
+	rq_new.destination.y = 7;
 	rq_new.release_time = 2;
 	rq_new.deadline_time = 26;
 	rq_new.capacity = 1;

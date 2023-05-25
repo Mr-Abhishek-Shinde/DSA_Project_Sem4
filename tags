@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/bhushan/Documents/Sem4/DSA/DSA_Project_Sem4/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+add_location_in_route	functions.c	/^void add_location_in_route(route *r, request *rq, int flag){$/;"	f	typeref:typename:void
+arr	structures.h	/^	request **arr;$/;"	m	struct:set_of_requests	typeref:typename:request **
+arrival_time	functions.c	/^double arrival_time(route r, coordinate l){$/;"	f	typeref:typename:double
+calculate_objective	functions.c	/^double calculate_objective(route r, double initial_time){$/;"	f	typeref:typename:double
+capacity	structures.h	/^		int capacity;$/;"	m	struct:request	typeref:typename:int
+capacity	structures.h	/^		int capacity;$/;"	m	struct:worker	typeref:typename:int
+constrain_satisfy	functions.c	/^int constrain_satisfy(route r, worker w, double initial_time){$/;"	f	typeref:typename:int
+coordinate	structures.h	/^typedef struct coordinate{$/;"	s
+coordinate	structures.h	/^}coordinate;$/;"	t	typeref:struct:coordinate
+corresponding_request	structures.h	/^		request *corresponding_request;$/;"	m	struct:location_node	typeref:typename:request *
+current_location	structures.h	/^		coordinate current_location;$/;"	m	struct:worker	typeref:typename:coordinate
+deadline_time	structures.h	/^		double release_time, deadline_time;$/;"	m	struct:request	typeref:typename:double
+destination	structures.h	/^		coordinate origin, destination;$/;"	m	struct:request	typeref:typename:coordinate
+display_route	functions.c	/^void display_route(route r){$/;"	f	typeref:typename:void
+findCurrentLocation	functions.c	/^route findCurrentLocation(route r, worker *w, request *rq){$/;"	f	typeref:typename:route
+flow_time	functions.c	/^double flow_time(route r, request rq){$/;"	f	typeref:typename:double
+init_route	functions.c	/^void init_route(route *r, coordinate worker){$/;"	f	typeref:typename:void
+insertion_operator	functions.c	/^route insertion_operator(route r, worker w, request *rq){$/;"	f	typeref:typename:route
+isOrigin	structures.h	/^		int isOrigin;$/;"	m	struct:location_node	typeref:typename:int
+location_node	structures.h	/^typedef struct location_node{$/;"	s
+location_node	structures.h	/^}location_node;$/;"	t	typeref:struct:location_node
+main	main.c	/^int main(){$/;"	f	typeref:typename:int
+next_location_node	structures.h	/^		struct location_node *next_location_node;$/;"	m	struct:location_node	typeref:struct:location_node *
+origin	structures.h	/^		coordinate origin, destination;$/;"	m	struct:request	typeref:typename:coordinate
+picked_up	structures.h	/^		int picked_up;$/;"	m	struct:worker	typeref:typename:int
+release_time	structures.h	/^		double release_time, deadline_time;$/;"	m	struct:request	typeref:typename:double
+request	structures.h	/^typedef struct request{$/;"	s
+request	structures.h	/^}request;$/;"	t	typeref:struct:request
+route	structures.h	/^typedef location_node * route;$/;"	t	typeref:typename:location_node *
+sequenced_location	structures.h	/^		coordinate sequenced_location;$/;"	m	struct:location_node	typeref:typename:coordinate
+set_of_requests	structures.h	/^typedef struct set_of_requests{$/;"	s
+set_of_requests	structures.h	/^}set_of_requests;$/;"	t	typeref:struct:set_of_requests
+time_between_nodes	functions.c	/^double time_between_nodes(coordinate n1, coordinate n2){$/;"	f	typeref:typename:double
+worker	structures.h	/^typedef struct worker{$/;"	s
+worker	structures.h	/^}worker;$/;"	t	typeref:struct:worker
+x	structures.h	/^		double x, y;$/;"	m	struct:coordinate	typeref:typename:double
+y	structures.h	/^		double x, y;$/;"	m	struct:coordinate	typeref:typename:double

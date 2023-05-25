@@ -196,7 +196,7 @@ int constrain_satisfy(route r, worker w, double initial_time){
 	return 1;
 }
 
-double calculate_objective(route r, double initial_time){
+/*double calculate_objective(route r, double initial_time){
 	double time = initial_time;
 	location_node *p = r, *n = r->next_location_node;
 	double sum_flow_time = 0;
@@ -209,4 +209,23 @@ double calculate_objective(route r, double initial_time){
 		n = n->next_location_node;
 	}
 	return sum_flow_time;
+}*/
+
+double calculate_objective(route r, double initial_time){
+	double time = initial_time;
+	location_node *p = r, *n = r->next_location_node;
+	double max_flow_time = 0;
+	double flow_time;
+	while(n){
+		time += time_between_nodes(p->sequenced_location, n->sequenced_location);
+		if(n->isOrigin == 0){
+			flow_time = time - n->corresponding_request->release_time;
+			if(flow_time > max_flow_time){
+				max_flow_time = flow_time;
+			}
+		}
+		n = n->next_location_node;
+	}
+	printf("max flow time  - %lf\n", flow_time);
+	return max_flow_time;
 }
