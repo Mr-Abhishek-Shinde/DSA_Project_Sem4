@@ -128,30 +128,69 @@ void update_worker_route(Route *r, Worker *w, Request *new_request){
 }	
 
 // precalculation
-void pre_calculation(Route r, double **slk_values, double **pck_values, double ***mobj_values, Request new_request, Worker worker){
+void pre_calculation(Route r, double **slk_values, double **pck_values, double ***mobj_values, double **thr, double **par, Request new_request, Worker worker){//I have changed the prototype of this function/
 		*slk_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
 		*pck_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
 		*mobj_values = (double**)malloc(sizeof(double*)*r.no_of_nodes);
+		*thr = (double *)malloc(sizeof(double) * r.no_of_nodes);
+		*par = (double *)malloc(sizeof(double) * r.no_of_nodes);
 		for(int i = 0; i < r.no_of_nodes; i++){
 			(*mobj_values)[i] = (double*)malloc(sizeof(double)*r.no_of_nodes);	
 		}
 		slk_time(r, *slk_values, new_request);
 		pre_calculate_pck(r, *pck_values, worker);
+		threshold_precalculate(r, *slk, *thr, new_request);
+		par_precalculate(r, *par, *mobj_values, new_request);
 		/* mobj(r, *mobj_values, new_request); */
         return;
 }
 
+//threshold_precalculate funtion
+void threshold_precalculate(Route r, double *slk, double *thr, Request new_request){
+	int i = 0;
+	location_node *p = r.path;
+	double cmp1, cmp2;
+	while(p){
+		cmp1 = slk[i] - det(p, new_request.destination);
+		cmp2 = new_request.deadline_time - arr(r, p, new_request) - distance_node(p->sequenced_location, (new_request.destination)->sequenced_location);
+		thr[i] = min(cmp1, cmp2);
+		p = p->next_location;
+		i++;
+	}
+	return;
+}
+
+//par_precalculate function
+void par_precalculate(Route r, double *par, double *mobj, Request new_request){
+	int i = 0;
+	location_node *p = r.path;
+	double cmp1, cmp2;
+	while(p){
+		if(i + 1 < r.no_of_nodes){
+			cmp1 = det(p, new_request.destination) + mobj[i + 1];
+		}
+		else{
+			cmp1 = det(p, new_request.destination);//mobj is 0
+		}
+		cmp2 = arr(r, p, new_request) + distance_node(p->sequenced_node, (new_request.destination)->sequenced_location) - new_request.release_time;
+		par[i] = max(cmp1, cmp2);
+		p = p->next_location;
+		i++;
+	}
+}
+
+
 // insertion operator
 void insertion_operator(Route r, Worker w, Request *new_request){
 		double OBJ_MIN = INT_MAX, OBJ_NEW;
-        double *slk_values = NULL, *pck_values = NULL, **mobj = NULL;
+        double *slk_values = NULL, *pck_values = NULL, **mobj = NULLi, *thr = NULL, *par = NULL;
 		location_node *li, *lj;    // this pointer will itterate through loops
 		location_node *origin_i = NULL, *dest_j = NULL;    // this pointer is address of that node after which or and dr will get inserted
 		li = r.path;
 		lj = li;
 
 		// precalculation
-		pre_calculation(r, &slk_values, &pck_values, &mobj, *new_request, w);
+		pre_calculation(r, &slk_values, &pck_values, &mobj, &thr, &par,*new_request, w);
         /* printf("After precalculation\n"); */
         display_route(r); 
 		for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
