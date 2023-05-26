@@ -201,7 +201,8 @@ void insertion_operator(Route r, Worker w, Request *new_request){
 						if(check_capacity_constraint(w, *new_request, pck_values, i, j) ){
                             if( check_deadline_constraint(r, slk_values, i, j, (*new_request).origin, (*new_request).destination, li, lj, *new_request)){
 					        	/* if(check_deadline_constraint(r, slk_values, i, j, (*new_request).origin, (*new_request).destination, li, lj, *new_request)){ */
-					        			OBJ_NEW = obj(r, i , j, li, lj, mobj, new_request); 
+					        			//OBJ_NEW = obj(r, i , j, li, lj, mobj, new_request); 
+									OBJ_NEW = obj(*mobj, li, *new_request, min_par, r.no_of_nodes);
 
 					        			// update (i*, j*) with (i, j) according to OBJ
                                         /* printf("%f\t%f\n", OBJ_MIN, OBJ_NEW); */
@@ -237,3 +238,17 @@ void insertion_operator(Route r, Worker w, Request *new_request){
 		return;
 } 
 
+//New obj function
+double obj(double *mobj, location_node *li, Request new_request, double min_par, int noOfNodes){
+	double cmp1, cmp2, cmp3;
+	int ind = li->index;
+	cmp1 = mobj[0];
+	if(ind == noOfNodes){
+		cmp2 = det(li, new_request.destination);
+	}
+	else{
+		cmp2 = det(li, new_request.destination) + mobj[ind];
+	}
+	cmp3 = det(li, new_request.destination) + min_par;
+	return min(cmp1, min(cmp2, cmp3));
+}
