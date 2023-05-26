@@ -1,7 +1,8 @@
+#include <stdio.h>
 #include "constraints.h"
 
-void pre_calculate_pck(Route r, double *pck_values){
-	pck_values[0] = 0;
+void pre_calculate_pck(Route r, double *pck_values, Worker worker){
+	pck_values[0] = worker.picked_up;
 
 	location_node *p = r.path->next_location_node;
 	int i = 1;
@@ -29,22 +30,11 @@ void pre_calculate_pck(Route r, double *pck_values){
 
 int check_capacity_constraint(Worker worker, Request new_request, double *pck_values, int i, int j){
 	int c = (worker.capacity - new_request.capacity);
-	
-	int result;
 
 	if((pck_values[i] <= c) && (pck_values[j] <= c)){
-		result = 1;
+		return 1;
 	}
 	else{
 		return 0;
 	}
-
-	for(int k = i + 1; k <= j; k++){
-		if(pck_values[k] > c){
-			result = 0;
-			break;
-		}
-	}
-
-	return result;
 }

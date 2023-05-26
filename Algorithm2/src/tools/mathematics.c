@@ -55,6 +55,6 @@ void add_vector(coordinate *result, coordinate a, coordinate b){
 void find_unit_vector(coordinate *result, coordinate a, coordinate b){
 		double magnitude = distance_node(a, b); 
 		result->x = (b.x - a.x) / magnitude;
-		result->y = (b.x - a.x) / magnitude;
+		result->y = (b.y - a.y) / magnitude;
 		return;
 }

@@ -11,14 +11,14 @@ double time_between_nodes(coordinate n1, coordinate n2){
 	return sqrt(time_squared);
 }
 
-double flow_time(Route r, Request rq){
-        double arr_destination = arr(r, rq.destination);
+double flow_time(Route r, Request rq, Request newRequest){
+        double arr_destination = arr(r, rq.destination, rq);
         return arr_destination - rq.release_time;
 }
 
 
 // precalculating mobj:
-void mobj(Route r, double **mobj_values){
+void mobj(Route r, double **mobj_values, Request newRequest){
 	double ft_curr = 0;
 
 	location_node *q, *p = r.path;
@@ -34,7 +34,7 @@ void mobj(Route r, double **mobj_values){
 			}
 			else{
 				if(q == q->corresponding_request->destination){ //check if q is a destination
-					ft_curr = flow_time(r, *(q->corresponding_request));
+					ft_curr = flow_time(r, *(q->corresponding_request), newRequest);
 				}
 				else{
 					ft_curr = 0;
@@ -66,7 +66,7 @@ double max_of_mf(double mf1, double mf2, double mf3, double mf4){
 
 double obj(Route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, Request *new_rq){
 	double mf1, mf2, mf3, mf4;
-	int n = r.no_of_nodes;
+	int n = r.no_of_nodes - 1;
 	location_node *or = new_rq->origin;
 	location_node *dr= new_rq->destination;
 
@@ -74,13 +74,23 @@ double obj(Route r, int i, int j, location_node *li, location_node *lj, double *
 
 	if(i == j){
 		mf2 = 0;
-		mf3 = dis(li, or) + dis(or, dr) + dis(dr, li->next_location_node) - dis(li, li->next_location_node) + mobj_values[i + 1][n];
-		mf4 = arr(r, li) + dis(li, or) + dis(or, dr) - new_rq->release_time;
+        if(!li->next_location_node)
+            mf3 = 0;
+        else{
+
+		    mf3 = distance_node(li->sequenced_location, or->sequenced_location) + distance_node(or->sequenced_location, dr->sequenced_location) + distance_node(dr->sequenced_location, li->next_location_node->sequenced_location) - distance_node(li->sequenced_location, li->next_location_node->sequenced_location) + mobj_values[i + 1][n];
+		    mf4 = arr(r, li, *new_rq) + distance_node(li->sequenced_location, or->sequenced_location) + distance_node(or->sequenced_location, dr->sequenced_location) - new_rq->release_time;
+        }
 	}
 	else{
 		mf2 = det(li, or) + mobj_values[i + 1][j];
-		mf3 = det(li, or) + det(lj, dr) + mobj_values[j + 1][n];
-		mf4 = arr(r, lj) + det(li, or) + dis(lj, dr) - new_rq->release_time;
+        if(j == n){
+            mf3 = 0;
+        }
+        else{
+		    mf3 = det(li, or) + det(lj, dr) + mobj_values[j + 1][n];
+        }
+		mf4 = arr(r, lj, *new_rq) + det(li, or) + distance_node(lj->sequenced_location, dr->sequenced_location) - new_rq->release_time;
 	}
 
 

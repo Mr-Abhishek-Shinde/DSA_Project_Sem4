@@ -7,7 +7,7 @@
 
 // coordinates of any location (origin or destination or worker's current location) 
 typedef struct coordinate{
-		int x, y;
+		double x, y;
 }coordinate;
 
 /** let request r = < or, dr, tr, er, cr >
