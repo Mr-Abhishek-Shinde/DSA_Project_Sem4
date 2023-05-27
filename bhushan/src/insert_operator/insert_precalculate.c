@@ -145,39 +145,7 @@ void pre_calculation(Route r, double **slk_values, double **pck_values, double *
         return;
 }
 
-//threshold_precalculate funtion
-void threshold_precalculate(Route r, double *slk, double *thr, Request new_request){
-	int i = 0;
-	location_node *p = r.path;
-	double cmp1, cmp2;
-	while(p){
-		cmp1 = slk[i] - det(p, new_request.destination);
-		cmp2 = new_request.deadline_time - arr(r, p, new_request) - distance_node(p->sequenced_location, (new_request.destination)->sequenced_location);
-		thr[i] = min(cmp1, cmp2);
-		p = p->next_location;
-		i++;
-	}
-	return;
-}
 
-//par_precalculate function
-void par_precalculate(Route r, double *par, double *mobj, Request new_request){
-	int i = 0;
-	location_node *p = r.path;
-	double cmp1, cmp2;
-	while(p){
-		if(i + 1 < r.no_of_nodes){
-			cmp1 = det(p, new_request.destination) + mobj[i + 1];
-		}
-		else{
-			cmp1 = det(p, new_request.destination);//mobj is 0
-		}
-		cmp2 = arr(r, p, new_request) + distance_node(p->sequenced_node, (new_request.destination)->sequenced_location) - new_request.release_time;
-		par[i] = max(cmp1, cmp2);
-		p = p->next_location;
-		i++;
-	}
-}
 
 
 // insertion operator
@@ -193,6 +161,17 @@ void insertion_operator(Route r, Worker w, Request *new_request){
 		pre_calculation(r, &slk_values, &pck_values, &mobj, &thr, &par,*new_request, w);
         /* printf("After precalculation\n"); */
         display_route(r); 
+	//Handling i = j cases.
+	for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
+		if(check_capacity_constrain_iEqualj(w, *new_request, pck_values, i) && check_deadline_constrain(li, *new_request, slk_values, i)){
+			OBJ_NEW = obj_iEqualj(r, mobj, li, *new_request, i);
+			if(OBJ_NEW < OBJ_MIN){
+				OBJ_MIN = OBJ_NEW;
+				origin_i = li;
+				dest_i = lj;
+			}
+		}
+	}
 		for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
                 lj = li;
 				for(int j = i; j < r.no_of_nodes; j++, lj = lj->next_location_node){
@@ -251,4 +230,65 @@ double obj(double *mobj, location_node *li, Request new_request, double min_par,
 	}
 	cmp3 = det(li, new_request.destination) + min_par;
 	return min(cmp1, min(cmp2, cmp3));
+}
+
+//New function for capacity for handling i=j cases
+int check_capacity_constraint_iEqualj(Worker w, Request new_request, double *pck_values, int i){
+	return pck_values[i] <= (w.capacity - new_request.capacity);
+}
+
+//New function for deadline for handling i=j cases
+int check_deadline_constrain(location_node *li, Request new_request, double *slk_values, int i){
+	if(li->next_location)
+		return 1;
+	else
+		return (distance_node(li, new_request.origin) + distance_node(new_request.origin, new_request.destination) + distance_node(new_request.destination, li->next_location_node) - distance_node(li, li->next_location_node)) <= slk[i];
+}
+
+//New function for calculation for obj for i=j cases
+double obj_iEqualj(Route r, double *mobj, location_node *li, Request new_request, int i){
+	double cmp1;
+	double cmp2;
+	cmp1 = mobj[0];
+	if((i + 1) == r.no_of_nodes){
+		cmp2 = det(li, new_request.origin);
+	}
+	else{
+		cmp2 = det(li, new_request.origin) + mobj[i + 1];
+	}
+	return max(cmp1, cmp2);
+}
+
+//threshold_precalculate funtion
+void threshold_precalculate(Route r, double *slk, double *thr, Request new_request){
+	int i = 0;
+	location_node *p = r.path;
+	double cmp1, cmp2;
+	while(p){
+		cmp1 = slk[i] - det(p, new_request.destination);
+		cmp2 = new_request.deadline_time - arr(r, p, new_request) - distance_node(p->sequenced_location, (new_request.destination)->sequenced_location);
+		thr[i] = min(cmp1, cmp2);
+		p = p->next_location;
+		i++;
+	}
+	return;
+}
+
+//par_precalculate function
+void par_precalculate(Route r, double *par, double *mobj, Request new_request){
+	int i = 0;
+	location_node *p = r.path;
+	double cmp1, cmp2;
+	while(p){
+		if(i + 1 < r.no_of_nodes){
+			cmp1 = det(p, new_request.destination) + mobj[i + 1];
+		}
+		else{
+			cmp1 = det(p, new_request.destination);//mobj is 0
+		}
+		cmp2 = arr(r, p, new_request) + distance_node(p->sequenced_node, (new_request.destination)->sequenced_location) - new_request.release_time;
+		par[i] = max(cmp1, cmp2);
+		p = p->next_location;
+		i++;
+	}
 }
