@@ -163,7 +163,11 @@ void insertion_operator(Route r, Worker w, Request *new_request){
         display_route(r); 
 	//Handling i = j cases.
 	for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
+<<<<<<< HEAD
 		if(check_capacity_constraint_iEqualj(w, *new_request, pck_values, i) && check_deadline_constraint_iEqualj(li, *new_request, slk_values, i)){
+=======
+		if(check_capacity_constraint_iEqualj(w, *new_request, pck_values, i) && check_deadline_constraint_iEqualj(li, *new_request, slk_values, i)){
+>>>>>>> e800669 (some functions modified)
 			OBJ_NEW = obj_iEqualj(r, mobj, li, *new_request, i);
 			if(OBJ_NEW < OBJ_MIN){
 				OBJ_MIN = OBJ_NEW;
@@ -238,11 +242,16 @@ int check_capacity_constraint_iEqualj(Worker w, Request new_request, double *pck
 }
 
 //New function for deadline for handling i=j cases
+<<<<<<< HEAD
 int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values, int i){
-	if(li->next_location)
+	if(li->next_location_node)
+=======
+int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values, int i){
+	if(li->next_location_node)
+>>>>>>> e800669 (some functions modified)
 		return 1;
 	else
-		return (distance_node(li, new_request.origin) + distance_node(new_request.origin, new_request.destination) + distance_node(new_request.destination, li->next_location_node) - distance_node(li, li->next_location_node)) <= slk[i];
+		return (distance_node(li->sequenced_location, new_request.origin->sequenced_location) + distance_node(new_request.origin->sequenced_location, new_request.destination->sequenced_location) + distance_node(new_request.destination->sequenced_location, li->next_location_node->sequenced_location) - distance_node(li->sequenced_location->sequenced_location, li->next_location_node->sequenced_location)) <= slk[i];
 }
 
 //New function for calculation for obj for i=j cases
