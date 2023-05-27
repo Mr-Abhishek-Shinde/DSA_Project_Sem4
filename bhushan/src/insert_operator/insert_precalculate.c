@@ -128,7 +128,7 @@ void update_worker_route(Request *new_request){
 }	
 
 // precalculation
-void pre_calculation(Route r, double **slk_values, double **pck_values, double ***mobj_values, double **thr, double **par, Request new_request, Worker worker){//I have changed the prototype of this function/
+void pre_calculation(Route r, double **slk_values, double **pck_values, double **mobj_values, double **thr, double **par, Request new_request, Worker worker){//I have changed the prototype of this function/
 		*slk_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
 		*pck_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
 		*mobj_values = (double**)malloc(sizeof(double*)*r.no_of_nodes);
