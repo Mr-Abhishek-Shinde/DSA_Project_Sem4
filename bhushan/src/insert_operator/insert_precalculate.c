@@ -163,7 +163,7 @@ void insertion_operator(Route r, Worker w, Request *new_request){
         display_route(r); 
 	//Handling i = j cases.
 	for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
-		if(check_capacity_constrain_iEqualj(w, *new_request, pck_values, i) && check_deadline_constrain(li, *new_request, slk_values, i)){
+		if(check_capacity_constraint_iEqualj(w, *new_request, pck_values, i) && check_deadline_constraint_iEqualj(li, *new_request, slk_values, i)){
 			OBJ_NEW = obj_iEqualj(r, mobj, li, *new_request, i);
 			if(OBJ_NEW < OBJ_MIN){
 				OBJ_MIN = OBJ_NEW;
@@ -222,14 +222,14 @@ double obj(double *mobj, location_node *li, Request new_request, double min_par,
 	double cmp1, cmp2, cmp3;
 	int ind = li->index;
 	cmp1 = mobj[0];
-	if(ind == noOfNodes){
+	if(ind == (noOfNodes - 1)){
 		cmp2 = det(li, new_request.destination);
 	}
 	else{
-		cmp2 = det(li, new_request.destination) + mobj[ind];
+		cmp2 = det(li, new_request.destination) + mobj[ind + 1];
 	}
 	cmp3 = det(li, new_request.destination) + min_par;
-	return min(cmp1, min(cmp2, cmp3));
+	return max(cmp1, min(cmp2, cmp3));
 }
 
 //New function for capacity for handling i=j cases
@@ -238,7 +238,7 @@ int check_capacity_constraint_iEqualj(Worker w, Request new_request, double *pck
 }
 
 //New function for deadline for handling i=j cases
-int check_deadline_constrain(location_node *li, Request new_request, double *slk_values, int i){
+int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values, int i){
 	if(li->next_location)
 		return 1;
 	else
@@ -288,7 +288,7 @@ void par_precalculate(Route r, double *par, double *mobj, Request new_request){
 		}
 		cmp2 = arr(r, p, new_request) + distance_node(p->sequenced_node, (new_request.destination)->sequenced_location) - new_request.release_time;
 		par[i] = max(cmp1, cmp2);
-		p = p->next_location;
+		p = p->next_location_node;
 		i++;
 	}
 }
