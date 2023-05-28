@@ -224,8 +224,8 @@ double calculate_objective(route r, double initial_time){
 				max_flow_time = flow_time;
 			}
 		}
+		p = n;
 		n = n->next_location_node;
 	}
-	printf("max flow time  - %lf\n", flow_time);
 	return max_flow_time;
 }

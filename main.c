@@ -10,6 +10,7 @@ int main(){
 	w.picked_up = 0;
 	init_route(&r, w.current_location);
 	request rq1, rq2, rq3, rq_new;
+
 	rq1.origin.x = 4;
 	rq1.origin.y = 4;
 	rq1.destination.x = 10;
@@ -17,6 +18,7 @@ int main(){
 	rq1.release_time = 0;
 	rq1.deadline_time = 25;
 	rq1.capacity = 1;
+
 	rq2.origin.x = 8;
 	rq2.origin.y = 8;
 	rq2.destination.x = 4;
@@ -24,6 +26,7 @@ int main(){
 	rq2.release_time = 0;
 	rq2.deadline_time = 37;
 	rq2.capacity = 1;
+
 	rq3.origin.x = 10;
 	rq3.origin.y = 2;
 	rq3.destination.x = 10;
@@ -31,22 +34,25 @@ int main(){
 	rq3.release_time = 0;
 	rq3.deadline_time = 33;
 	rq3.capacity = 1;
-	rq_new.origin.x = 4;
-	rq_new.origin.y = 6;
-	rq_new.destination.x = 9;
-	rq_new.destination.y = 7;
+
+	rq_new.origin.x = 9;
+	rq_new.origin.y = 7;
+	rq_new.destination.x = 10;
+	rq_new.destination.y = 3;
 	rq_new.release_time = 2;
-	rq_new.deadline_time = 26;
+	rq_new.deadline_time = 30;
 	rq_new.capacity = 1;
+
 	add_location_in_route(&r, &rq1, 0);
 	add_location_in_route(&r, &rq2, 0);
 	add_location_in_route(&r, &rq1, 1);
 	add_location_in_route(&r, &rq3, 0);
 	add_location_in_route(&r, &rq3, 1);
 	add_location_in_route(&r, &rq2, 1);
-	display_route(r);
+
 	r = insertion_operator(r, w, &rq_new);
+	printf("Route after insertion of the new request:\n");
 	display_route(r);
-	printf("sum flow time - %lf\n", calculate_objective(r, rq_new.release_time));
+	printf("max flow time - %lf\n", calculate_objective(r, rq_new.release_time));
 	return 0;
 }
