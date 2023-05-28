@@ -58,7 +58,7 @@ void update_par(ST st, double par, int index_to_insert){
     if(si <= start_index && ei >= end_index){
             return st[node];
     }
-    int min_value = INT_MAX;
+    double min_value = INT_MAX;
     if(si >= start_index && si <= end_index){
         min_value = min(min_value, min_par_helper(st, 2*node + 2, (start_index + end_index)/2 + 1, end_index, si, ei));
     }
@@ -71,6 +71,7 @@ void update_par(ST st, double par, int index_to_insert){
     else if(ei < start_index){
         return INT_MAX;
     }
+    printf("$%f$\n", min_value);
 
     return min_value;
 }
@@ -78,7 +79,10 @@ void update_par(ST st, double par, int index_to_insert){
 
 /*! returns min par(j) */
 double min_par(ST st, int si, int ei){
-    return min_par_helper(st.arr, 0, 0, st.size, si, ei);
+   if(si > ei){
+	return INT_MAX;
+    }
+    return min_par_helper(st.arr, 0, 0, st.size - 1, si, ei);
 }   
 
 /* display segment tree */ 

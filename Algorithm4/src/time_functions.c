@@ -32,7 +32,7 @@ double det(location_node *k, location_node *p){
         if(!k->next_location_node){
             return distance_node(k->sequenced_location, p->sequenced_location);
         }
-		detour = distance_node(k->sequenced_location, p->sequenced_location) + distance_node(p->sequenced_location, k->next_location_node->sequenced_location);// - distance_node(k->sequenced_location, k->next_location_node->sequenced_location);
+		detour = distance_node(k->sequenced_location, p->sequenced_location) + distance_node(p->sequenced_location, k->next_location_node->sequenced_location) - distance_node(k->sequenced_location, k->next_location_node->sequenced_location);
 		return detour;
 }
 

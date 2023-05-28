@@ -205,9 +205,9 @@ void insertion_operator(Request *new_request){
 		printf("i = %d\n", i);
 		// Updating leaf threshold with par in ST:
 		update_par(st, precalculate_set.par[i + 1], i + 1);
-	/*	printf("segment tree %d - \n", i);
+/*		printf("segment tree %d - \n", i);
     		display(st, size);
-		printf("\n"); */
+		printf("\n");  */
 
 		// Checking for the capacity constraint:
 		if(check_capacity_constraint(*new_request, precalculate_set.pck, i + 1) == 0){
@@ -215,7 +215,8 @@ void insertion_operator(Request *new_request){
 		}
 		else{
 			// Checking for the deadline constraint:
-//			if(initial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
+			if(initial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
+				printf("det : %f\t", det(li, new_request->origin));
 				si = binary_search_thr(precalculate_set.sorted_thr, det(li, new_request->origin), 0, size - 1);
 				par_min = min_par(st, si, size - 1);
 				printf("%d\t%d\t min par: %f\n", si, i, par_min);
@@ -229,7 +230,7 @@ void insertion_operator(Request *new_request){
 					minimum_par = par_min;
 					OBJ_MIN = OBJ_NEW;
 				}
-			//}
+			}
 		}
 		li = li->prev_location_node;
 	}

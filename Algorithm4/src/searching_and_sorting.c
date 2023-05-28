@@ -59,5 +59,5 @@ int binary_search_thr(double *arr, double key, int i, int n){
 		}
 	}
 
-	return 0;
+	return l;
 }
