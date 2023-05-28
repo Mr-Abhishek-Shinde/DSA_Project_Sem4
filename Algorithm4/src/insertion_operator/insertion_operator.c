@@ -221,11 +221,11 @@ double obj(double *mobj, location_node *li, Request new_request, double min_par,
 
 
 //New function for calculation for obj for i=j cases
-double obj_iEqualj(Route r, double *mobj, location_node *li, Request new_request, int i){
+double obj_iEqualj(double *mobj, location_node *li, Request new_request, int i){
 	double cmp1;
 	double cmp2;
 	cmp1 = mobj[0];
-	if((i + 1) == r.no_of_nodes){
+	if((i + 1) == ridesharing_state.route.no_of_nodes){
 		cmp2 = det(li, new_request.origin);
 	}
 	else{
