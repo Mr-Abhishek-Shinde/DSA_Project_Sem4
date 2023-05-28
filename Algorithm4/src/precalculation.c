@@ -1,5 +1,4 @@
 #include "precalculation.h"
-#include "searching_and_sorting.h"
 void precalculation_set_init(Precalculation_set *precalculation_set){
 	precalculation_set->pck = NULL;
 	precalculation_set->slk = NULL;

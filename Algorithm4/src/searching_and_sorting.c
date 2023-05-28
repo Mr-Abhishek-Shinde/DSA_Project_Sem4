@@ -1,3 +1,5 @@
+#include "searching_and_sorting.h"
+
 void merge_karo(double *arr, int size, int l, int h){
 	double *arr2 = malloc((h - l + 1) * sizeof(double));
 	int i = l;
@@ -30,4 +32,31 @@ void sort_karo(double *arr, int s, int l, int h){
 	sort_karo(arr, s, l, (l + h) / 2);
 	sort_karo(arr, s, ((l + h) / 2) + 1, h);
 	merge_karo(arr, s, l, h);
+}
+
+int binary_search_thr(double *thr_arr, int key, int i, int n){
+	int l = i;
+	int h = n;
+	int m;
+
+	while(l <= h){
+		m = (l + h) / 2;
+
+		if(thr_arr[m] == key){
+			return m;
+		}
+		else if(thr_arr[m] > key && (m != 0 && thr_arr[m - 1] < key)){
+			return m;
+		}
+		else{
+			if(thr_arr[m] < key){
+				l = m + 1;
+			}
+			else{
+				h = m - 1;
+			}
+		}
+	}
+
+	return 0;
 }
