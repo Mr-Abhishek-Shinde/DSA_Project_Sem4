@@ -46,7 +46,9 @@ capacity	include/structures.h	/^		int capacity;$/;"	m	struct:Request	typeref:typ
 capacity	include/structures.h	/^		int capacity;$/;"	m	struct:Worker	typeref:typename:int
 capacity_constraint.o	Makefile	/^capacity_constraint.o: capacity_constraint.c $/;"	t
 check_capacity_constraint	src/constraints/capacity_constraint.c	/^int check_capacity_constraint(Worker worker, Request new_request, double *pck_values, int i, int/;"	f	typeref:typename:int
+check_capacity_constraint_iEqualj	src/insert_operator/insert_precalculate.c	/^int check_capacity_constraint_iEqualj(Worker w, Request new_request, double *pck_values, int i){$/;"	f	typeref:typename:int
 check_deadline_constraint	src/constraints/deadline_constraint.c	/^int check_deadline_constraint(Route r, double *slk, int i, int j, location_node *origin, locatio/;"	f	typeref:typename:int
+check_deadline_constraint_iEqualj	src/insert_operator/insert_precalculate.c	/^int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values/;"	f	typeref:typename:int
 clean	Makefile	/^clean:$/;"	t
 compute_obj.o	Makefile	/^compute_obj.o: compute_obj.c$/;"	t
 coordinate	include/structures.h	/^typedef struct coordinate{$/;"	s
@@ -79,17 +81,22 @@ mathematics.o	Makefile	/^mathematics.o: mathematics.c$/;"	t
 max	src/tools/mathematics.c	/^int max(int a, int b){$/;"	f	typeref:typename:int
 max_of_mf	src/constraints/compute_obj.c	/^double max_of_mf(double mf1, double mf2, double mf3, double mf4){$/;"	f	typeref:typename:double
 min	src/tools/mathematics.c	/^double min(double num1, double num2){$/;"	f	typeref:typename:double
+mobj	include/precalculation.h	/^	double *mobj;$/;"	m	struct:precalculation_set	typeref:typename:double *
 mobj	src/constraints/compute_obj.c	/^void mobj(Route r, double **mobj_values, Request newRequest){$/;"	f	typeref:typename:void
 next_location_node	include/structures.h	/^		struct location_node *next_location_node;$/;"	m	struct:location_node	typeref:struct:location_node *
 no_of_nodes	include/structures.h	/^		int no_of_nodes;$/;"	m	struct:Route	typeref:typename:int
 obj	src/constraints/compute_obj.c	/^double obj(Route r, int i, int j, location_node *li, location_node *lj, double **mobj_values, Re/;"	f	typeref:typename:double
 obj	src/insert_operator/insert_precalculate.c	/^double obj(double *mobj, location_node *li, Request new_request, double min_par, int noOfNodes){$/;"	f	typeref:typename:double
+obj_iEqualj	src/insert_operator/insert_precalculate.c	/^double obj_iEqualj(Route r, double *mobj, location_node *li, Request new_request, int i){$/;"	f	typeref:typename:double
 origin	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:Request	typeref:struct:location_node *
+par	include/precalculation.h	/^	double *par;$/;"	m	struct:precalculation_set	typeref:typename:double *
 par_precalculate	src/insert_operator/insert_precalculate.c	/^void par_precalculate(Route r, double *par, double *mobj, Request new_request){$/;"	f	typeref:typename:void
 path	include/structures.h	/^		location_node *path;$/;"	m	struct:Route	typeref:typename:location_node *
+pck	include/precalculation.h	/^	double *pck;$/;"	m	struct:precalculation_set	typeref:typename:double *
 picked_up	include/structures.h	/^		int picked_up;$/;"	m	struct:Worker	typeref:typename:int
 pre_calculate_pck	src/constraints/capacity_constraint.c	/^void pre_calculate_pck(Route r, double *pck_values, Worker worker){$/;"	f	typeref:typename:void
 pre_calculation	src/insert_operator/insert_precalculate.c	/^void pre_calculation(Route r, double **slk_values, double **pck_values, double ***mobj_values, d/;"	f	typeref:typename:void
+precalculation_set	include/precalculation.h	/^typedef struct precalculation_set{$/;"	s
 release_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:Request	typeref:typename:double
 request	src/main.c	/^void request(Request *request, double orx, double ory, double drx, double dry, double release_ti/;"	f	typeref:typename:void
 result	Makefile	/^result: capacity_constraint.o compute_obj.o deadline_constraint.o insert_precalculate.o rideshar/;"	t
@@ -100,8 +107,10 @@ scale_vector	src/tools/mathematics.c	/^void scale_vector(coordinate *result, coo
 sequenced_location	include/structures.h	/^		coordinate sequenced_location;$/;"	m	struct:location_node	typeref:typename:coordinate
 set_of_requests	include/ridesharing.h	/^    Set_of_requests set_of_requests;$/;"	m	struct:RideSharing_State	typeref:typename:Set_of_requests
 size	include/structures.h	/^	int size;$/;"	m	struct:Set_of_requests	typeref:typename:int
+slk	include/precalculation.h	/^	double *slk;$/;"	m	struct:precalculation_set	typeref:typename:double *
 slk_intermediate	src/constraints/deadline_constraint.c	/^void slk_intermediate(Route r, double *slk, location_node *n, int k, Request newRequest){$/;"	f	typeref:typename:void
 slk_time	src/constraints/deadline_constraint.c	/^void slk_time(Route r, double *slk, Request newRequest){$/;"	f	typeref:typename:void
+thr	include/precalculation.h	/^	double *thr;$/;"	m	struct:precalculation_set	typeref:typename:double *
 threshold_precalculate	src/insert_operator/insert_precalculate.c	/^void threshold_precalculate(Route r, double *slk, double *thr, Request new_request){$/;"	f	typeref:typename:void
 time_between_nodes	src/constraints/compute_obj.c	/^double time_between_nodes(coordinate n1, coordinate n2){$/;"	f	typeref:typename:double
 update_route	src/insert_operator/insert_precalculate.c	/^void update_route(Route *r, Worker *w, location_node *before_worker){$/;"	f	typeref:typename:void
