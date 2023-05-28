@@ -31,7 +31,7 @@ void insert_coordinate(location_node *l, double x, double y){
     return;
 }
 
-void insert_node(RideSharing_State *ridesharing_state, Request *request, location_node *l, int index){
+void insert_node(Request *request, location_node *l, int index){
 
     location_node *path = ridesharing_state->route.path;
 
@@ -81,7 +81,7 @@ void update_route(Route *r, Worker *w, location_node *before_worker){
     return;
 }
 
-void update_worker_route(Route *r, Worker *w, Request *new_request){
+void update_worker_route(Request *new_request){
 
     int w_picked = 0;
     // here a and b are nodes between which our new locaton of worker will lie
@@ -89,7 +89,7 @@ void update_worker_route(Route *r, Worker *w, Request *new_request){
 	coordinate unit_vector_ab, scaled_vector_aw;
 	double scale_aw, distance;
 
-        a = r->path;
+        a = (ridesharing_state.r)->path;
         distance = 0;
         
 		while(a->next_location_node){
@@ -109,11 +109,11 @@ void update_worker_route(Route *r, Worker *w, Request *new_request){
 				a = a->next_location_node;
 		}
 
-        w->picked_up = w_picked;
+        (ridesharing_state.w)->picked_up = w_picked;
 
         if(!a->next_location_node){
-            w->picked_up -= a->corresponding_request->capacity;
-            w->current_location = a->sequenced_location;
+            (ridesharing_state.w)->picked_up -= a->corresponding_request->capacity;
+            (ridesharing_state.w)->current_location = a->sequenced_location;
         }
         else{
 	    	b = a->next_location_node;

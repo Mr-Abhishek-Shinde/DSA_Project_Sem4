@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "insertion_operator.h"
 
-void request(Request *request, double orx, double ory, double drx, double dry, double release_time, double deadline_time, int capacity){
+void request_init(Request *request, double orx, double ory, double drx, double dry, double release_time, double deadline_time, int capacity){
     request->origin = (location_node*)malloc(sizeof(location_node));
     request->destination = (location_node*)malloc(sizeof(location_node));
 
@@ -31,23 +31,23 @@ int main(){
 
     init_Ridesharing_State(&ridesharing_state);
 
-    request(&r1, 4, 4, 10, 4, 0, 25, 1);
-    request(&r2, 8, 8, 4, 0, 0, 37, 1);
-    request(&r3, 10, 2, 10, 0, 0, 33, 1);
+    request_init(&r1, 4, 4, 10, 4, 0, 25, 1);
+    request_init(&r2, 8, 8, 4, 0, 0, 37, 1);
+    request_init(&r3, 10, 2, 10, 0, 0, 33, 1);
 
-    insert_node(&ridesharing_state, &r1, r1.origin, 1);
-    insert_node(&ridesharing_state, &r2, r2.origin, 2);
-    insert_node(&ridesharing_state, &r1, r1.destination, 3);
-    insert_node(&ridesharing_state, &r3, r3.origin, 4);
-    insert_node(&ridesharing_state, &r3, r3.destination, 5);
-    insert_node(&ridesharing_state, &r2, r2.destination, 6);
+    insert_node(&r1, r1.origin, 1);
+    insert_node(&r2, r2.origin, 2);
+    insert_node(&r1, r1.destination, 3);
+    insert_node(&r3, r3.origin, 4);
+    insert_node(&r3, r3.destination, 5);
+    insert_node(&r2, r2.destination, 6);
 
-    request(&newRequest, 4, 6, 6, 2, 2, 26, 1);
-    update_worker_route(&ridesharing_state.route, &ridesharing_state.worker, &newRequest);
+    request_init(&newRequest, 4, 6, 6, 2, 2, 26, 1);
+    update_worker_route(&newRequest);
     display_route(ridesharing_state.route);
     /* printf("\n"); */
     /* printf("%d\n", ridesharing_state.worker.picked_up); */
-    insertion_operator(ridesharing_state.route, ridesharing_state.worker, &newRequest); 
+    insertion_operator(&newRequest); 
     /* display_route(ridesharing_state.route); */
 
     return 0;
