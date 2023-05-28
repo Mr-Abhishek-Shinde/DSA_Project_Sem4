@@ -35,12 +35,12 @@ int main(){
 	rq3.deadline_time = 33;
 	rq3.capacity = 1;
 
-	rq_new.origin.x = 9;
-	rq_new.origin.y = 7;
-	rq_new.destination.x = 10;
-	rq_new.destination.y = 3;
+	rq_new.origin.x = 4;
+	rq_new.origin.y = 6;
+	rq_new.destination.x = 6;
+	rq_new.destination.y = 2;
 	rq_new.release_time = 2;
-	rq_new.deadline_time = 30;
+	rq_new.deadline_time = 26;
 	rq_new.capacity = 1;
 
 	add_location_in_route(&r, &rq1, 0);
