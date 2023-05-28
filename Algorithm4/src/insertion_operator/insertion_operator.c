@@ -25,7 +25,7 @@ void display_route(Route r){
         /* printf("%p\n", p); */
 		sq = p->sequenced_location;
 		//cr = p.corresponding_request;
-		printf("Coordinates of %dth location node are: (%f, %f)\n", i++, sq.x, sq.y); 
+		printf("Coordinates of %dth location node are: (%f, %f) index - %d \n", i++, sq.x, sq.y, p->index); 
 		p = p->next_location_node;
 	}
 	return;
