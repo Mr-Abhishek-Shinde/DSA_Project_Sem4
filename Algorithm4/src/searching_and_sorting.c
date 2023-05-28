@@ -34,7 +34,7 @@ void sort_karo(double *arr, int s, int l, int h){
 	merge_karo(arr, s, l, h);
 }
 
-int binary_search_thr(double *thr_arr, int key, int i, int n){
+int binary_search_thr(double *arr, int key, int i, int n){
 	int l = i;
 	int h = n;
 	int m;
@@ -42,14 +42,14 @@ int binary_search_thr(double *thr_arr, int key, int i, int n){
 	while(l <= h){
 		m = (l + h) / 2;
 
-		if(thr_arr[m] == key){
+		if(arr[m] == key){
 			return m;
 		}
-		else if(thr_arr[m] > key && (m != 0 && thr_arr[m - 1] < key)){
+		else if(arr[m] > key && (m != 0 && arr[m - 1] < key)){
 			return m;
 		}
 		else{
-			if(thr_arr[m] < key){
+			if(arr[m] < key){
 				l = m + 1;
 			}
 			else{

@@ -27,7 +27,7 @@ typedef struct Request{
 }Request; 
 
 
-void request_init(Request *request, double orx, double ory, double drx, double dry, double release_time, double deadline_time, int capacity);
+void init_request(Request *request, double orx, double ory, double drx, double dry, double release_time, double deadline_time, int capacity);
 //Set of requests
 typedef struct Set_of_requests{
 	Request *arr;

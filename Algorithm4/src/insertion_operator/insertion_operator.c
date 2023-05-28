@@ -33,14 +33,14 @@ void insert_coordinate(location_node *l, double x, double y){
 
 void insert_node(Request *request, location_node *l, int index){
 
-    location_node *path = ridesharing_state->route.path;
+    location_node *path = ridesharing_state.route.path;
 
     if(!path){
-         ridesharing_state->route.path = l;
-         ridesharing_state->route.path->next_location_node = NULL;
-         ridesharing_state->route.path->corresponding_request  = request;
-         ridesharing_state->route.no_of_nodes++;
-         ridesharing_state->route.path->index = index;
+         (ridesharing_state.route).path = l;
+         (ridesharing_state.route).path->next_location_node = NULL;
+         (ridesharing_state.route).path->corresponding_request  = request;
+         (ridesharing_state.route).no_of_nodes++;
+         (ridesharing_state.route).path->index = index;
          return;
     }
 
@@ -51,7 +51,7 @@ void insert_node(Request *request, location_node *l, int index){
     path = path->next_location_node;
     path->next_location_node = NULL;
     path->corresponding_request = request;
-    ridesharing_state->route.no_of_nodes++;
+    ridesharing_state.route.no_of_nodes++;
     path->index = index;
 
     return;
@@ -59,24 +59,24 @@ void insert_node(Request *request, location_node *l, int index){
 
 
 void update_route(location_node *before_worker){
-    location_node *traversal = r->path, *tmp = NULL;
+    location_node *traversal = ridesharing_state.route.path, *tmp = NULL;
 
     while(traversal != before_worker){
         tmp = traversal;
         traversal  = traversal->next_location_node;
         free(tmp);
-        r->no_of_nodes--;
+        ridesharing_state.route.no_of_nodes--;
     }
 
-    r->path = (location_node*)malloc(sizeof(location_node));
-    r->path->sequenced_location = w->current_location;
-    r->path->next_location_node = traversal->next_location_node;
-    r->path->index = 0;
-    r->path->corresponding_request = NULL;
-    r->no_of_nodes++;
+    ridesharing_state.route.path = (location_node*)malloc(sizeof(location_node));
+    (ridesharing_state.route.path)->sequenced_location = ridesharing_state.worker.current_location;
+    (ridesharing_state.route.path)->next_location_node = traversal->next_location_node;
+    (ridesharing_state.route.path)->index = 0;
+    (ridesharing_state.route.path)->corresponding_request = NULL;
+    ridesharing_state.route.no_of_nodes++;
 
     free(traversal);
-    r->no_of_nodes--;
+    ridesharing_state.route.no_of_nodes--;
 
     return;
 }
@@ -89,7 +89,7 @@ void update_worker_route(Request *new_request){
 	coordinate unit_vector_ab, scaled_vector_aw;
 	double scale_aw, distance;
 
-        a = (ridesharing_state.r)->path;
+        a = ridesharing_state.route.path;
         distance = 0;
         
 		while(a->next_location_node){
@@ -109,21 +109,21 @@ void update_worker_route(Request *new_request){
 				a = a->next_location_node;
 		}
 
-        (ridesharing_state.w)->picked_up = w_picked;
+        ridesharing_state.worker.picked_up = w_picked;
 
         if(!a->next_location_node){
-            (ridesharing_state.w)->picked_up -= a->corresponding_request->capacity;
-            (ridesharing_state.w)->current_location = a->sequenced_location;
+            ridesharing_state.worker.picked_up -= a->corresponding_request->capacity;
+            ridesharing_state.worker.current_location = a->sequenced_location;
         }
         else{
 	    	b = a->next_location_node;
 		    find_unit_vector(&unit_vector_ab, a->sequenced_location, b->sequenced_location);
 		    scale_aw = new_request->release_time - distance;
 		    scale_vector(&scaled_vector_aw, unit_vector_ab, scale_aw);
-		    add_vector(&w->current_location, a->sequenced_location, scaled_vector_aw);
+		    add_vector(a->sequenced_location, scaled_vector_aw);
         }
 		// update route
-        update_route(r, w, a);
+        update_route(a);
 		return;
 }	
 

@@ -22,3 +22,22 @@ void init_Ridesharing_State(RideSharing_State *ridesharing_state){
     
     return;
 }
+
+void init_request(Request *request, double orx, double ory, double drx, double dry, double release_time, double deadline_time, int capacity){
+    request->origin = (location_node*)malloc(sizeof(location_node));
+    request->destination = (location_node*)malloc(sizeof(location_node));
+
+    insert_coordinate(request->origin, orx, ory);
+    insert_coordinate(request->destination, drx, dry);
+
+    request->origin->next_location_node = NULL;
+    request->origin->corresponding_request = request;
+    request->destination->next_location_node = NULL;
+    request->destination->corresponding_request = request;
+
+    request->release_time = release_time;
+    request->deadline_time = deadline_time;
+    request->capacity = capacity;
+
+    return;
+}
