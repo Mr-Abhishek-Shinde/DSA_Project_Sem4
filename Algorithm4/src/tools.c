@@ -25,8 +25,8 @@ double min(double num1, double num2){
 }
 
 /* returns max of a and b */
-int max(int a, int b){
-	return (a > b ? a : b);
+double max(double a, double b){
+	return (a > b) ? a : b;
 }
 
 /* scale the unit_vector according to scale input */

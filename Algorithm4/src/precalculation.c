@@ -5,7 +5,7 @@
 #include "time_functions.h"
 #include "tools.h"
 #include <stdlib.h>
-#include <float.h>
+#include <limits.h>
 
 
 void precalculation_set_init(Precalculation_set *precalculation_set){
@@ -29,14 +29,28 @@ void malloc_precalculation_set(Precalculation_set *precalculate_set){
 void precalculate(Precalculation_set *precalculation_set, Request new_request){
 	malloc_precalculation_set(precalculation_set);
 	precalculate_slk(precalculation_set->slk, new_request);
+	printf("slk done - ");
+	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
+		printf("%f ", precalculation_set->slk[i]);
+	}
+	printf("\n");
 	precalculate_pck(precalculation_set->pck);
 	printf("slk and pck done\n");
 	precalculate_thr(precalculation_set->slk, precalculation_set->thr, new_request);
-	printf("thr done\n");
+	printf("thr done - ");
+	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
+		printf("%f ", precalculation_set->thr[i]);
+	}
+	printf("\n");
+
 	precalculate_mobj(precalculation_set->mobj, new_request);
-	printf("mobj done\n");
+	printf("mobj done - ");
 	precalculate_par(precalculation_set->par, precalculation_set->mobj, new_request);
-	printf("par done\n");
+	printf("par done - ");
+	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
+		printf("%f ", precalculation_set->par[i]);
+	}
+	printf("\n");
 	precalculate_sorted_thr(precalculation_set->sorted_thr, precalculation_set->thr);
 	printf("sorted thr done\n");
         return;
@@ -44,7 +58,7 @@ void precalculate(Precalculation_set *precalculation_set, Request new_request){
 
 void precalculate_slk(double *slk_values, Request new_request){
 	dis_from_origin[0] = 0;
-	slk_values[ridesharing_state.route.no_of_nodes - 1] = DBL_MAX;
+	slk_values[ridesharing_state.route.no_of_nodes - 1] = INT_MAX;
 	int k = 0;
 	precalculate_slk_helper(slk_values, ridesharing_state.route.path, k, new_request);
 	return;

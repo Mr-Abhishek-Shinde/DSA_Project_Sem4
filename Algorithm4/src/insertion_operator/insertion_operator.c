@@ -85,12 +85,12 @@ void update_route(location_node *before_worker){
     }
     (ridesharing_state.route.path)->index = 0;
     int i = 1;
-    location_node *li = (ridesharing_state.route.path)->next_location_node;
+    /*location_node *li = (ridesharing_state.route.path)->next_location_node;
     while(li){
 	    li->index = i;
 	    i++;
 	    li = li->next_location_node;
-    }
+    }*/
     (ridesharing_state.route.path)->corresponding_request = NULL;
     ridesharing_state.route.no_of_nodes++;
 
@@ -171,7 +171,10 @@ void insertion_operator(Request *new_request){
 		st_arr[i] = INT_MAX;
 	}
 	construct_ST(&st, st_arr);
-	printf("construct sefment tree done\n");
+/*	printf("segment tree - \n");
+    	display(st, size);
+	printf("\n"); */
+	printf("construct segment tree done\n");
 	li = ridesharing_state.route.path;
 	// Handling the case of i == j:
 	for(int i = 0; i < size; i++, li = li->next_location_node){
@@ -202,6 +205,9 @@ void insertion_operator(Request *new_request){
 		printf("i = %d\n", i);
 		// Updating leaf threshold with par in ST:
 		update_par(st, precalculate_set.par[i + 1], i + 1);
+	/*	printf("segment tree %d - \n", i);
+    		display(st, size);
+		printf("\n"); */
 
 		// Checking for the capacity constraint:
 		if(check_capacity_constraint(*new_request, precalculate_set.pck, i + 1) == 0){

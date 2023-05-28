@@ -14,7 +14,7 @@ double distance_node(coordinate a, coordinate b);
 double min(double num1, double num2);
 
 /* returns max of a and b */
-int max(int a, int b);
+double max(double a, double b);
 
 /* scale the unit_vector according to scale input */
 void scale_vector(coordinate *result, coordinate unit_vector, double scale);
