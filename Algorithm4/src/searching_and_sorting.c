@@ -35,7 +35,7 @@ void sort_karo(double *arr, int s, int l, int h){
 	merge_karo(arr, s, l, h);
 }
 
-int binary_search_thr(double *arr, int key, int i, int n){
+int binary_search_thr(double *arr, double key, int i, int n){
 	int l = i;
 	int h = n;
 	int m;

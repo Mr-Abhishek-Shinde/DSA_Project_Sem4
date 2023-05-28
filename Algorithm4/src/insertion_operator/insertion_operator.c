@@ -215,9 +215,10 @@ void insertion_operator(Request *new_request){
 		}
 		else{
 			// Checking for the deadline constraint:
-			if(initial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
-				si = binary_search_thr(precalculate_set.thr, det(li, new_request->origin), 0, size - 1);
+//			if(initial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
+				si = binary_search_thr(precalculate_set.sorted_thr, det(li, new_request->origin), 0, size - 1);
 				par_min = min_par(st, si, size - 1);
+				printf("%d\t%d\t min par: %f\n", si, i, par_min);
 			
 				// Calculating the objective:
 				OBJ_NEW = obj(precalculate_set.mobj, li, *new_request, par_min, size);
@@ -225,10 +226,10 @@ void insertion_operator(Request *new_request){
 				// updating (i*, j*) with (i, j) according to OBJ
 				if(OBJ_MIN > OBJ_NEW){
 					origin_i = li;
-					minimum_par = par_min;;
+					minimum_par = par_min;
 					OBJ_MIN = OBJ_NEW;
 				}
-			}
+			//}
 		}
 		li = li->prev_location_node;
 	}
@@ -262,12 +263,12 @@ double obj(double *mobj, location_node *li, Request new_request, double par_min,
 	int ind = li->index;
 	cmp1 = mobj[0];
 	if(ind == (noOfNodes - 1)){
-		cmp2 = det(li, new_request.destination);
+		cmp2 = det(li, new_request.origin);
 	}
 	else{
-		cmp2 = det(li, new_request.destination) + mobj[ind + 1];
+		cmp2 = det(li, new_request.origin) + mobj[ind + 1];
 	}
-	cmp3 = det(li, new_request.destination) + par_min;
+	cmp3 = det(li, new_request.origin) + par_min;
 	return max(cmp1, max(cmp2, cmp3));
 }
 
@@ -279,10 +280,10 @@ double obj_iEqualj(double *mobj, location_node *li, Request new_request, int i){
 	double cmp2;
 	cmp1 = mobj[0];
 	if((i + 1) == ridesharing_state.route.no_of_nodes){
-		cmp2 = det(li, new_request.origin);
+		cmp2 = arr(li, new_request) + distance_node(li->sequenced_location, (new_request.origin)->sequenced_location) + distance_node((new_request.origin)->sequenced_location, (new_request.destination)->sequenced_location) - new_request.release_time;
 	}
 	else{
-		cmp2 = det(li, new_request.origin) + mobj[i + 1];
+		cmp2 = distance_node(li->sequenced_location, (new_request.origin)->sequenced_location) + distance_node((new_request.origin)->sequenced_location, (new_request.destination)->sequenced_location) + distance_node((new_request.destination)->sequenced_location, li->next_location_node->sequenced_location) - distance_node(li->sequenced_location, li->next_location_node->sequenced_location) + mobj[i + 1];
 	}
 	return max(cmp1, cmp2);
 }

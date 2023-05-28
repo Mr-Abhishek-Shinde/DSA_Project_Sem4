@@ -45,6 +45,10 @@ void precalculate(Precalculation_set *precalculation_set, Request new_request){
 
 	precalculate_mobj(precalculation_set->mobj, new_request);
 	printf("mobj done - ");
+	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
+		printf("%f ", precalculation_set->mobj[i]);
+	}
+	printf("\n");
 	precalculate_par(precalculation_set->par, precalculation_set->mobj, new_request);
 	printf("par done - ");
 	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
@@ -52,6 +56,11 @@ void precalculate(Precalculation_set *precalculation_set, Request new_request){
 	}
 	printf("\n");
 	precalculate_sorted_thr(precalculation_set->sorted_thr, precalculation_set->thr);
+	printf("sorted thre done - ");
+	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
+		printf("%f ", precalculation_set->sorted_thr[i]);
+	}
+	printf("\n");
 	printf("sorted thr done\n");
         return;
 }
@@ -109,7 +118,7 @@ void precalculate_thr(double *slk_values, double *thr_values, Request new_reques
 	double cmp1, cmp2;
 	while(p){
 		cmp1 = slk_values[i] - det(p, new_request.destination);
-		cmp2 = new_request.deadline_time - arr( p, new_request) - distance_node(p->sequenced_location, (new_request.destination)->sequenced_location);
+		cmp2 = new_request.deadline_time - arr(p, new_request) - distance_node(p->sequenced_location, (new_request.destination)->sequenced_location);
 		thr_values[i] = min(cmp1, cmp2);
 		p = p->next_location_node;
 		i++;
