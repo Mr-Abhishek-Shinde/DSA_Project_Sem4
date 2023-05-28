@@ -58,7 +58,7 @@ void insert_node(Request *request, location_node *l, int index){
 }
 
 
-void update_route(Route *r, Worker *w, location_node *before_worker){
+void update_route(location_node *before_worker){
     location_node *traversal = r->path, *tmp = NULL;
 
     while(traversal != before_worker){
@@ -127,29 +127,12 @@ void update_worker_route(Request *new_request){
 		return;
 }	
 
-// precalculation
-void pre_calculation(Route r, double **slk_values, double **pck_values, double **mobj_values, double **thr, double **par, Request new_request, Worker worker){//I have changed the prototype of this function/
-		*slk_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
-		*pck_values = (double*)malloc(sizeof(double)*r.no_of_nodes);
-		*mobj_values = (double**)malloc(sizeof(double*)*r.no_of_nodes);
-		*thr = (double *)malloc(sizeof(double) * r.no_of_nodes);
-		*par = (double *)malloc(sizeof(double) * r.no_of_nodes);
-		for(int i = 0; i < r.no_of_nodes; i++){
-			(*mobj_values)[i] = (double*)malloc(sizeof(double)*r.no_of_nodes);	
-		}
-		slk_time(r, *slk_values, new_request);
-		pre_calculate_pck(r, *pck_values, worker);
-		threshold_precalculate(r, *slk, *thr, new_request);
-		par_precalculate(r, *par, *mobj_values, new_request);
-		/* mobj(r, *mobj_values, new_request); */
-        return;
-}
 
 
 
 
 // insertion operator
-void insertion_operator(Route r, Worker w, Request *new_request){
+void insertion_operator(Request *new_request){
 		double OBJ_MIN = INT_MAX, OBJ_NEW;
         double *slk_values = NULL, *pck_values = NULL, **mobj = NULLi, *thr = NULL, *par = NULL;
 		location_node *li, *lj;    // this pointer will itterate through loops
@@ -163,11 +146,7 @@ void insertion_operator(Route r, Worker w, Request *new_request){
         display_route(r); 
 	//Handling i = j cases.
 	for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
-<<<<<<< HEAD
 		if(check_capacity_constraint_iEqualj(w, *new_request, pck_values, i) && check_deadline_constraint_iEqualj(li, *new_request, slk_values, i)){
-=======
-		if(check_capacity_constraint_iEqualj(w, *new_request, pck_values, i) && check_deadline_constraint_iEqualj(li, *new_request, slk_values, i)){
->>>>>>> e800669 (some functions modified)
 			OBJ_NEW = obj_iEqualj(r, mobj, li, *new_request, i);
 			if(OBJ_NEW < OBJ_MIN){
 				OBJ_MIN = OBJ_NEW;
@@ -236,23 +215,7 @@ double obj(double *mobj, location_node *li, Request new_request, double min_par,
 	return max(cmp1, min(cmp2, cmp3));
 }
 
-//New function for capacity for handling i=j cases
-int check_capacity_constraint_iEqualj(Worker w, Request new_request, double *pck_values, int i){
-	return pck_values[i] <= (w.capacity - new_request.capacity);
-}
 
-//New function for deadline for handling i=j cases
-<<<<<<< HEAD
-int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values, int i){
-	if(li->next_location_node)
-=======
-int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values, int i){
-	if(li->next_location_node)
->>>>>>> e800669 (some functions modified)
-		return 1;
-	else
-		return (distance_node(li->sequenced_location, new_request.origin->sequenced_location) + distance_node(new_request.origin->sequenced_location, new_request.destination->sequenced_location) + distance_node(new_request.destination->sequenced_location, li->next_location_node->sequenced_location) - distance_node(li->sequenced_location->sequenced_location, li->next_location_node->sequenced_location)) <= slk[i];
-}
 
 //New function for calculation for obj for i=j cases
 double obj_iEqualj(Route r, double *mobj, location_node *li, Request new_request, int i){
@@ -268,36 +231,6 @@ double obj_iEqualj(Route r, double *mobj, location_node *li, Request new_request
 	return max(cmp1, cmp2);
 }
 
-//threshold_precalculate funtion
-void threshold_precalculate(Route r, double *slk, double *thr, Request new_request){
-	int i = 0;
-	location_node *p = r.path;
-	double cmp1, cmp2;
-	while(p){
-		cmp1 = slk[i] - det(p, new_request.destination);
-		cmp2 = new_request.deadline_time - arr(r, p, new_request) - distance_node(p->sequenced_location, (new_request.destination)->sequenced_location);
-		thr[i] = min(cmp1, cmp2);
-		p = p->next_location;
-		i++;
-	}
-	return;
-}
 
-//par_precalculate function
-void par_precalculate(Route r, double *par, double *mobj, Request new_request){
-	int i = 0;
-	location_node *p = r.path;
-	double cmp1, cmp2;
-	while(p){
-		if(i + 1 < r.no_of_nodes){
-			cmp1 = det(p, new_request.destination) + mobj[i + 1];
-		}
-		else{
-			cmp1 = det(p, new_request.destination);//mobj is 0
-		}
-		cmp2 = arr(r, p, new_request) + distance_node(p->sequenced_node, (new_request.destination)->sequenced_location) - new_request.release_time;
-		par[i] = max(cmp1, cmp2);
-		p = p->next_location_node;
-		i++;
-	}
-}
+
+
