@@ -27,10 +27,9 @@ int main(){
     init_request(&newRequest, 4, 6, 6, 2, 2, 26, 1);
     update_worker_route(&newRequest);
     display_route(ridesharing_state.route);
-    /* printf("\n"); */
-    /* printf("%d\n", ridesharing_state.worker.picked_up); */
-    insertion_operator(&newRequest); 
-    /* display_route(ridesharing_state.route); */
 
+    insertion_operator(&newRequest); 
+
+    display_route(ridesharing_state.route);
     return 0;
 }

@@ -128,77 +128,80 @@ void update_worker_route(Request *new_request){
 }	
 
 
-
-
-
-// insertion operator
 void insertion_operator(Request *new_request){
-		double OBJ_MIN = INT_MAX, OBJ_NEW;
-        double *slk_values = NULL, *pck_values = NULL, **mobj = NULLi, *thr = NULL, *par = NULL;
-		location_node *li, *lj;    // this pointer will itterate through loops
-		location_node *origin_i = NULL, *dest_j = NULL;    // this pointer is address of that node after which or and dr will get inserted
-		li = r.path;
-		lj = li;
+	double OBJ_MIN = INT_MAX, OBJ_NEW;
+	
+	location_node *li = NULL, *lj = NULL; // these are the nodes which will be used for iteration
+        location_node *origin_i = NULL, *dest_j = NULL; // these are the nodes after which or and dr will get inserted
+	
+	int size = ridesharing_state.route.no_of_nodes;
+	
+	// Precalculation - pck, slk, thr, par, mobj
+	Precalculation_set precalculate_set;
+	precalculation(precalculate_set, *new_request);
 
-		// precalculation
-		pre_calculation(r, &slk_values, &pck_values, &mobj, &thr, &par,*new_request, w);
-        /* printf("After precalculation\n"); */
-        display_route(r); 
-	//Handling i = j cases.
-	for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
-		if(check_capacity_constraint_iEqualj(w, *new_request, pck_values, i) && check_deadline_constraint_iEqualj(li, *new_request, slk_values, i)){
-			OBJ_NEW = obj_iEqualj(r, mobj, li, *new_request, i);
-			if(OBJ_NEW < OBJ_MIN){
-				OBJ_MIN = OBJ_NEW;
-				origin_i = li;
-				dest_i = lj;
-			}
+	// Displaying the route before insertion:
+	display_route(ridesharing_state.route);
+
+	// Segment tree construction:
+	ST st;
+	init_ST(&st);
+
+	double *st_arr = (double *) malloc(sizeof(double) * ridesharing_state.route.noOfNodes);
+	for(int i = 0; i < size; i++){
+		st_arr[i] = DBL_MAX;
+	}
+	construct_ST(&st, st_arr);
+
+	li = ridesharing_state.route.path;
+	// Handling the case of i == j:
+	for(int i = 0; i < size; i++, li = li->next_location_node){
+                if(check_capacity_constraint_iEqualj(*new_request, precalculation_set.pck, i) && check_deadline_constraint_iEqualj(li, *new_request, precalculation_set.slk, i)){
+                        OBJ_NEW = obj_iEqualj(mobj, li, *new_request, i);
+                        if(OBJ_NEW < OBJ_MIN){
+                                OBJ_MIN = OBJ_NEW;
+                                origin_i = li;
+                                dest_i = li;
+                        }
+                }
+        }
+
+        li = ridesharing_state.route.path;
+	double par_min;
+	double brk = size - 1;
+
+	// Iterating the i:
+	for(int i = size - 1; i >= 0; i--){
+		// Updating leaf threshold with par in ST:
+		update_par(st, precalculation_set.par[i + 1], i + 1);
+
+		// Checking for the capacity constraint:
+		if(check_capacity_constraint(*new_request, precalculate_set.pck[i + 1], i + 1) == 0){
+			invalidate(st, precalculate_set.par, &brk);
+		}
+
+		// Checking for the deadline constraint:
+		if(intial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
+			si = binary_search_thr(precalculate_set.thr, key, 0, size - 1);
+			par_min = min_par(st, si, size - 1);
+		}
+
+		// Calculating the objective:
+		OBJ_NEW = obj(precalculate_set.mobj, li, *new_request, min_par, size);
+		
+		// updating (i*, j*) with (i, j) according to OBJ
+		if(OBJ_MIN > OBJ_NEW){
+			origin_i = li;
+			dest_j = lj;
+			OBJ_MIN = OBJ_NEW;
 		}
 	}
-		for(int i = 0; i < r.no_of_nodes; i++, li = li->next_location_node){
-                lj = li;
-				for(int j = i; j < r.no_of_nodes; j++, lj = lj->next_location_node){
-                        display_route(r);
-                        /* printf("i: %d\tj: %d\n", i, j); */
-						if(check_capacity_constraint(w, *new_request, pck_values, i, j) ){
-                            if( check_deadline_constraint(r, slk_values, i, j, (*new_request).origin, (*new_request).destination, li, lj, *new_request)){
-					        	/* if(check_deadline_constraint(r, slk_values, i, j, (*new_request).origin, (*new_request).destination, li, lj, *new_request)){ */
-					        			//OBJ_NEW = obj(r, i , j, li, lj, mobj, new_request); 
-									OBJ_NEW = obj(*mobj, li, *new_request, min_par, r.no_of_nodes);
 
-					        			// update (i*, j*) with (i, j) according to OBJ
-                                        /* printf("%f\t%f\n", OBJ_MIN, OBJ_NEW); */
-					        			if(OBJ_MIN > OBJ_NEW){
-					        					origin_i = li;
-					        					dest_j = lj;
-					        					OBJ_MIN = OBJ_NEW;
-					        			}
-					        	}
-                            }
-                        else{
-                            break;
-                        }
-				}
-		} 
-        /* printf("Outside of for loop\n"); */
-		// insert node after li and lj
-/*        if(origin_i){
-		    insert(new_request->origin, origin_i); 
-        }
-        else
-            return;
+	display_route(r);
 
-        if(origin_i == dest_j)
-            insert(new_request->destination, new_request->origin);
-        else
-		    insert((*new_request).destination, dest_j);
+	return;
+}
 
-		new_request->origin->index = r.no_of_nodes + 1;
-		new_request->destination->index = r.no_of_nodes + 2;
-		r.no_of_nodes += 2;  */
-        display_route(r); 
-		return;
-} 
 
 //New obj function
 double obj(double *mobj, location_node *li, Request new_request, double min_par, int noOfNodes){

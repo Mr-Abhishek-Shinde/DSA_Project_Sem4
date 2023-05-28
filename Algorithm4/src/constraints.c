@@ -12,3 +12,23 @@ int check_deadline_constraint_iEqualj(location_node *li, Request new_request, do
 	else
 		return (distance_node(li, new_request.origin) + distance_node(new_request.origin, new_request.destination) + distance_node(new_request.destination, li->next_location_node) - distance_node(li, li->next_location_node)) <= slk[i];
 }
+
+int check_capacity_constraint(Request new_request, double *pck_values, int i){
+        int c = (ridesharing_state.worker.capacity - new_request.capacity);
+
+        if(pck_values[i] <= c){
+                return 1;
+        }
+        else{
+                return 0;
+        }
+}
+
+int initial_deadline_condition(Request new_request, location_node *li,  int i, double *slk){
+	if(det(li, new_request.origin) <= slk[i]){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
