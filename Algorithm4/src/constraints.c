@@ -2,7 +2,7 @@
 #include "structures.h"
 //New function for capacity for handling i=j cases
 int check_capacity_constraint_iEqualj(Request new_request, double *pck_values, int i){
-	return pck_values[i] <= (ridesharing_state.w.capacity - new_request.capacity);
+	return pck_values[i] <= (ridesharing_state.worker.capacity - new_request.capacity);
 }
 
 //New function for deadline for handling i=j cases
