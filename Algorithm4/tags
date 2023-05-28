@@ -1,0 +1,145 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/bhushan/Documents/Sem4/DSA/DSA_Project_Sem4/Algorithm4/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+%.o	Makefile	/^%.o: %.c$/;"	t
+-C	Makefile	/^-C      = -c$/;"	m
+-O	Makefile	/^-O      = -o$/;"	m
+CAPACITY	include/structures.h	/^#define CAPACITY /;"	d
+CAPACITY	src/insertion_operator/insertion_operator.c	/^#define CAPACITY /;"	d	file:
+CONSTRAINTS	include/constraints.h	/^#define CONSTRAINTS$/;"	d
+FLAG	Makefile	/^FLAG 	= -lm -Wall -g $/;"	m
+GCC	Makefile	/^GCC   	= gcc $/;"	m
+GLOBAL	include/global.h	/^#define GLOBAL$/;"	d
+IFLAGS	Makefile	/^IFLAGS 	= -I include$/;"	m
+MAIN.c	Makefile	/^MAIN.c 	= main.c$/;"	m
+NNODES	src/insertion_operator/insertion_operator.c	/^#define NNODES /;"	d	file:
+PRECALCULATION	include/precalculation.h	/^#define PRECALCULATION$/;"	d
+Precalculation_set	include/precalculation.h	/^typedef struct Precalculation_set{$/;"	s
+Precalculation_set	include/precalculation.h	/^}Precalculation_set;$/;"	t	typeref:struct:Precalculation_set
+Request	include/structures.h	/^typedef struct Request{$/;"	s
+Request	include/structures.h	/^}Request; $/;"	t	typeref:struct:Request
+RideSharing_State	include/structures.h	/^typedef struct RideSharing_State{$/;"	s
+RideSharing_State	include/structures.h	/^}RideSharing_State;$/;"	t	typeref:struct:RideSharing_State
+Route	include/structures.h	/^typedef struct Route{$/;"	s
+Route	include/structures.h	/^}Route; $/;"	t	typeref:struct:Route
+SEARCHING_AND_SORTING	include/searching_and_sorting.h	/^#define SEARCHING_AND_SORTING$/;"	d
+SIZE_OF_ST	include/segment_tree.h	/^#define SIZE_OF_ST(/;"	d
+ST	include/segment_tree.h	/^typedef struct ST{$/;"	s
+ST	include/segment_tree.h	/^}ST;$/;"	t	typeref:struct:ST
+START_INDEX_ARR	include/segment_tree.h	/^#define START_INDEX_ARR /;"	d
+STRUCTURES	include/structures.h	/^#define STRUCTURES /;"	d
+Set_of_requests	include/structures.h	/^typedef struct Set_of_requests{$/;"	s
+Set_of_requests	include/structures.h	/^}Set_of_requests; $/;"	t	typeref:struct:Set_of_requests
+TIME_FUNCTIONS	include/time_functions.h	/^#define TIME_FUNCTIONS$/;"	d
+TOOLS	include/tools.h	/^#define TOOLS$/;"	d
+TOP_INDEX_ST	include/segment_tree.h	/^#define TOP_INDEX_ST /;"	d
+VPATH	Makefile	/^VPATH = src\/segment_tree 		\\$/;"	m
+Worker	include/structures.h	/^typedef struct Worker{$/;"	s
+Worker	include/structures.h	/^}Worker; $/;"	t	typeref:struct:Worker
+X_CORD	include/structures.h	/^#define X_CORD /;"	d
+Y_CORD	include/structures.h	/^#define Y_CORD /;"	d
+a_raise_b	src/tools.c	/^double a_raise_b(double a, double b){$/;"	f	typeref:typename:double
+add_vector	src/tools.c	/^void add_vector(coordinate *result, coordinate a, coordinate b){$/;"	f	typeref:typename:void
+arr	include/segment_tree.h	/^    double *arr;$/;"	m	struct:ST	typeref:typename:double *
+arr	include/structures.h	/^	Request *arr;$/;"	m	struct:Set_of_requests	typeref:typename:Request *
+arr	src/time_functions.c	/^double arr(location_node *k, Request newRequest){$/;"	f	typeref:typename:double
+binary_search_thr	src/searching_and_sorting.c	/^int binary_search_thr(double *arr, int key, int i, int n){$/;"	f	typeref:typename:int
+capacity	include/structures.h	/^		int capacity;$/;"	m	struct:Request	typeref:typename:int
+capacity	include/structures.h	/^	int capacity;$/;"	m	struct:Worker	typeref:typename:int
+check_capacity_constraint	src/constraints.c	/^int check_capacity_constraint(Request new_request, double *pck_values, int i){$/;"	f	typeref:typename:int
+check_capacity_constraint_iEqualj	src/constraints.c	/^int check_capacity_constraint_iEqualj(Request new_request, double *pck_values, int i){$/;"	f	typeref:typename:int
+check_deadline_constraint_iEqualj	src/constraints.c	/^int check_deadline_constraint_iEqualj(location_node *li, Request new_request, double *slk_values/;"	f	typeref:typename:int
+clean	Makefile	/^clean:$/;"	t
+constraints.o	Makefile	/^constraints.o: constraints.c$/;"	t
+construct_ST	src/segment_tree/segment_tree.c	/^void construct_ST(ST *st, double *arr){$/;"	f	typeref:typename:void
+construct_helper	src/segment_tree/segment_tree.c	/^void construct_helper(double *st, int node, int start_index_thr, int end_index_thr){$/;"	f	typeref:typename:void
+coordinate	include/structures.h	/^typedef struct coordinate{$/;"	s
+coordinate	include/structures.h	/^}coordinate;$/;"	t	typeref:struct:coordinate
+corresponding_request	include/structures.h	/^		struct Request *corresponding_request;$/;"	m	struct:location_node	typeref:struct:Request *
+current_location	include/structures.h	/^		coordinate current_location;$/;"	m	struct:Worker	typeref:typename:coordinate
+ddl	src/time_functions.c	/^double ddl(location_node *k){$/;"	f	typeref:typename:double
+deadline_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:Request	typeref:typename:double
+destination	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:Request	typeref:struct:location_node *
+det	src/time_functions.c	/^double det(location_node *k, location_node *p){$/;"	f	typeref:typename:double
+dis_from_origin	include/time_functions.h	/^double dis_from_origin[20];$/;"	v	typeref:typename:double[20]
+dis_index	src/time_functions.c	/^double dis_index(location_node *a, location_node *b){$/;"	f	typeref:typename:double
+display	src/segment_tree/segment_tree.c	/^void display(ST st, int size){$/;"	f	typeref:typename:void
+display_route	src/insertion_operator/insertion_operator.c	/^void display_route(Route r){$/;"	f	typeref:typename:void
+distance_node	src/tools.c	/^double distance_node(coordinate a, coordinate b){$/;"	f	typeref:typename:double
+find_unit_vector	src/tools.c	/^void find_unit_vector(coordinate *result, coordinate a, coordinate b){$/;"	f	typeref:typename:void
+flow_time	src/time_functions.c	/^double flow_time(Request rq, Request newRequest){$/;"	f	typeref:typename:double
+index	include/structures.h	/^		int index;    \/\/ it is for simplicity for precalculation - basically it is index of node$/;"	m	struct:location_node	typeref:typename:int
+init_Ridesharing_State	src/insertion_operator/ridesharing.c	/^void init_Ridesharing_State(RideSharing_State *ridesharing_state){$/;"	f	typeref:typename:void
+init_ST	src/segment_tree/segment_tree.c	/^void init_ST(ST *st){$/;"	f	typeref:typename:void
+init_request	src/insertion_operator/ridesharing.c	/^void init_request(Request *request, double orx, double ory, double drx, double dry, double relea/;"	f	typeref:typename:void
+initial_deadline_condition	src/constraints.c	/^int initial_deadline_condition(Request new_request, location_node *li,  int i, double *slk){$/;"	f	typeref:typename:int
+insert	src/time_functions.c	/^void insert(location_node *a, location_node *b){$/;"	f	typeref:typename:void
+insert_coordinate	src/insertion_operator/insertion_operator.c	/^void insert_coordinate(location_node *l, double x, double y){$/;"	f	typeref:typename:void
+insert_node	src/insertion_operator/insertion_operator.c	/^void insert_node(Request *request, location_node *l, int index){$/;"	f	typeref:typename:void
+insertion_operator	src/insertion_operator/insertion_operator.c	/^void insertion_operator(Request *new_request){$/;"	f	typeref:typename:void
+insertion_operator.o	Makefile	/^insertion_operator.o: insertion_operator.c$/;"	t
+invalidate	src/segment_tree/segment_tree.c	/^void invalidate(ST st, double *par, int *brk){$/;"	f	typeref:typename:void
+invalidate_node	src/segment_tree/segment_tree.c	/^void invalidate_node(double *st, int node, double par_j, int si, int ei){$/;"	f	typeref:typename:void
+location_node	include/structures.h	/^typedef struct location_node{$/;"	s
+location_node	include/structures.h	/^}location_node; $/;"	t	typeref:struct:location_node
+main	src/main.c	/^int main(){$/;"	f	typeref:typename:int
+malloc_precalculation_set	src/precalculation.c	/^void malloc_precalculation_set(Precalculation_set *precalculate_set){$/;"	f	typeref:typename:void
+max	src/tools.c	/^int max(int a, int b){$/;"	f	typeref:typename:int
+merge_karo	src/searching_and_sorting.c	/^void merge_karo(double *arr, int size, int l, int h){$/;"	f	typeref:typename:void
+min	src/tools.c	/^double min(double num1, double num2){$/;"	f	typeref:typename:double
+min_par	src/segment_tree/segment_tree.c	/^double min_par(ST st, int si, int ei){$/;"	f	typeref:typename:double
+min_par_helper	src/segment_tree/segment_tree.c	/^ double min_par_helper(double *st, int node, int start_index, int end_index, int si, int ei){$/;"	f	typeref:typename:double
+mobj	include/precalculation.h	/^	double *mobj;$/;"	m	struct:Precalculation_set	typeref:typename:double *
+next_location_node	include/structures.h	/^		struct location_node *next_location_node;$/;"	m	struct:location_node	typeref:struct:location_node *
+no_of_nodes	include/structures.h	/^		int no_of_nodes;$/;"	m	struct:Route	typeref:typename:int
+obj	src/insertion_operator/insertion_operator.c	/^double obj(double *mobj, location_node *li, Request new_request, double min_par, int noOfNodes){$/;"	f	typeref:typename:double
+obj_iEqualj	src/insertion_operator/insertion_operator.c	/^double obj_iEqualj(double *mobj, location_node *li, Request new_request, int i){$/;"	f	typeref:typename:double
+origin	include/structures.h	/^		struct location_node *origin, *destination;$/;"	m	struct:Request	typeref:struct:location_node *
+par	include/precalculation.h	/^	double *par;$/;"	m	struct:Precalculation_set	typeref:typename:double *
+path	include/structures.h	/^		location_node *path;$/;"	m	struct:Route	typeref:typename:location_node *
+pck	include/precalculation.h	/^	double *pck;$/;"	m	struct:Precalculation_set	typeref:typename:double *
+picked_up	include/structures.h	/^		int picked_up;$/;"	m	struct:Worker	typeref:typename:int
+precalculate	src/precalculation.c	/^void precalculate(Precalculation_set *precalculation_set, Request new_request){$/;"	f	typeref:typename:void
+precalculate_mobj	src/precalculation.c	/^void precalculate_mobj(double *mobj_values, Request new_request){$/;"	f	typeref:typename:void
+precalculate_mobj_helper	src/precalculation.c	/^void precalculate_mobj_helper(location_node *li, double *mobj_values, Request new_request, int n/;"	f	typeref:typename:void
+precalculate_par	src/precalculation.c	/^void precalculate_par(double *par_values, double *mobj_values, Request new_request){$/;"	f	typeref:typename:void
+precalculate_pck	src/precalculation.c	/^void precalculate_pck(double *pck_values){$/;"	f	typeref:typename:void
+precalculate_slk	src/precalculation.c	/^void precalculate_slk(double *slk_values, Request new_request){$/;"	f	typeref:typename:void
+precalculate_slk_helper	src/precalculation.c	/^void precalculate_slk_helper(double *slk_values, location_node *n, int k, Request new_request){$/;"	f	typeref:typename:void
+precalculate_sorted_thr	src/precalculation.c	/^void precalculate_sorted_thr(double *sorted_thr, double *thr){$/;"	f	typeref:typename:void
+precalculate_thr	src/precalculation.c	/^void precalculate_thr(double *slk_values, double *thr_values, Request new_request){$/;"	f	typeref:typename:void
+precalculation.o	Makefile	/^precalculation.o: precalculation.c$/;"	t
+precalculation_set_init	src/precalculation.c	/^void precalculation_set_init(Precalculation_set *precalculation_set){$/;"	f	typeref:typename:void
+release_time	include/structures.h	/^		double release_time, deadline_time;$/;"	m	struct:Request	typeref:typename:double
+result	Makefile	/^result: constraints.o precalculation.o searching_and_sorting.o time_functions.o tools.o insertio/;"	t
+ridesharing.o	Makefile	/^ridesharing.o: ridesharing.c$/;"	t
+ridesharing_state	src/main.c	/^RideSharing_State ridesharing_state;$/;"	v	typeref:typename:RideSharing_State
+route	include/structures.h	/^    Route route;$/;"	m	struct:RideSharing_State	typeref:typename:Route
+scale_vector	src/tools.c	/^void scale_vector(coordinate *result, coordinate unit_vector, double scale){$/;"	f	typeref:typename:void
+searching_and_sorting.o	Makefile	/^searching_and_sorting.o: searching_and_sorting.c$/;"	t
+segment_tree.o	Makefile	/^segment_tree.o: segment_tree.c$/;"	t
+sequenced_location	include/structures.h	/^		coordinate sequenced_location;$/;"	m	struct:location_node	typeref:typename:coordinate
+set_of_requests	include/structures.h	/^    Set_of_requests set_of_requests;$/;"	m	struct:RideSharing_State	typeref:typename:Set_of_requests
+size	include/segment_tree.h	/^    int size;$/;"	m	struct:ST	typeref:typename:int
+size	include/structures.h	/^	int size;$/;"	m	struct:Set_of_requests	typeref:typename:int
+slk	include/precalculation.h	/^	double *slk;$/;"	m	struct:Precalculation_set	typeref:typename:double *
+sort_karo	src/searching_and_sorting.c	/^void sort_karo(double *arr, int s, int l, int h){$/;"	f	typeref:typename:void
+sorted_thr	include/precalculation.h	/^	double *sorted_thr;$/;"	m	struct:Precalculation_set	typeref:typename:double *
+thr	include/precalculation.h	/^	double *thr;$/;"	m	struct:Precalculation_set	typeref:typename:double *
+time_functions.o	Makefile	/^time_functions.o: time_functions.c$/;"	t
+tools.o	Makefile	/^tools.o: tools.c$/;"	t
+update_par	src/segment_tree/segment_tree.c	/^void update_par(ST st, double par, int index_to_insert){$/;"	f	typeref:typename:void
+update_par_helper	src/segment_tree/segment_tree.c	/^void update_par_helper(double *st, int node, int start_index, int end_index, double par, int i){$/;"	f	typeref:typename:void
+update_route	src/insertion_operator/insertion_operator.c	/^void update_route(location_node *before_worker){$/;"	f	typeref:typename:void
+update_worker_route	src/insertion_operator/insertion_operator.c	/^void update_worker_route(Request *new_request){$/;"	f	typeref:typename:void
+worker	include/structures.h	/^    Worker worker;$/;"	m	struct:RideSharing_State	typeref:typename:Worker
+x	include/structures.h	/^		double x, y;$/;"	m	struct:coordinate	typeref:typename:double
+y	include/structures.h	/^		double x, y;$/;"	m	struct:coordinate	typeref:typename:double

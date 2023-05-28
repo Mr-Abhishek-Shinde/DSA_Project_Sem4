@@ -2,10 +2,8 @@
 #include <float.h>
 #include "constraints.h"
 #include "time_functions.h"
-#include "mathematics.h"
-
-
-int dis_from_origin[NNODE];
+#include "tools.h"
+#include "global.h"
 
 // distance between given index
 double dis_index(location_node *a, location_node *b){
@@ -40,7 +38,7 @@ double det(location_node *k, location_node *p){
 
 // arr(k) (arrival time) - it will be time from origin to current node
 double arr(location_node *k, Request newRequest){
-		location_node *p = ridesharing.route.path;
+		location_node *p = ridesharing_state.route.path;
 		int arr_time;
 		arr_time = dis_index(p, k);   // Route means from Worker to k
 		arr_time += newRequest.release_time;
@@ -54,4 +52,9 @@ void insert(location_node *a, location_node *b){
 		a->next_location_node = temp;
 		return;
 }
- 
+
+// flow time of rq. 
+double flow_time(Request rq, Request newRequest){
+        double arr_destination = arr(rq.destination, rq);
+        return arr_destination - rq.release_time;
+}

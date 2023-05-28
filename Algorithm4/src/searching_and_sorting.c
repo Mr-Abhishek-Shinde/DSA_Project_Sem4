@@ -1,4 +1,5 @@
 #include "searching_and_sorting.h"
+#include <stdlib.h>
 
 void merge_karo(double *arr, int size, int l, int h){
 	double *arr2 = malloc((h - l + 1) * sizeof(double));

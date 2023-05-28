@@ -1,5 +1,4 @@
 #include "structures.h"
-#include "ridesharing.h"
 
 void display_route(Route r);
 void insert_node(Request *request, location_node *l, int index);

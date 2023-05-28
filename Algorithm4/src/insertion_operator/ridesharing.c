@@ -1,10 +1,11 @@
 #include <stdlib.h>
-#include "ridesharing.h"
+#include "global.h"
 
 void init_Ridesharing_State(RideSharing_State *ridesharing_state){
 
     ridesharing_state->route.path = (location_node*)malloc(sizeof(location_node));
     ridesharing_state->route.path->next_location_node = NULL;
+    ridesharing_state->route.path->prev_location_node = NULL;
     ridesharing_state->route.path->corresponding_request = NULL;
     ridesharing_state->route.path->index = 0;
     ridesharing_state->route.no_of_nodes = 1;
@@ -31,8 +32,10 @@ void init_request(Request *request, double orx, double ory, double drx, double d
     insert_coordinate(request->destination, drx, dry);
 
     request->origin->next_location_node = NULL;
+    request->origin->prev_location_node = NULL;
     request->origin->corresponding_request = request;
     request->destination->next_location_node = NULL;
+    request->destination->prev_location_node = NULL;
     request->destination->corresponding_request = request;
 
     request->release_time = release_time;

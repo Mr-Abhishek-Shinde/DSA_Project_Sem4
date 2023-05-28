@@ -1,25 +1,31 @@
 #include <limits.h>
-#include "ridesharing.h"
-#include "mobj.h"
-#include "mathematics.h"
+#include "tools.h"
 #include "constraints.h"
 #include <stdlib.h>
+#include <limits.h>
+#include "global.h"
+#include "insertion_operator.h"
+#include "time_functions.h"
+#include "precalculation.h"
+#include "segment_tree.h"
+#include "searching_and_sorting.h"
+#include <stdio.h>
 #include <float.h>
 
 #define CAPACITY (4)
 #define NNODES (6)
 
 void display_route(Route r){
-	int i = 0;
 	location_node *p = r.path;
 	coordinate sq;
 	//request cr;
 	//for(int i = 0; i < r.no_of_nodes; i++){
+	int i = 0;
 	while(p){
         /* printf("%p\n", p); */
 		sq = p->sequenced_location;
 		//cr = p.corresponding_request;
-		/* printf("Coordinates of %dth location node are: (%f, %f)\n", i++, 1.0, 1.0); //sq.x, sq.y); */
+		printf("Coordinates of %dth location node are: (%f, %f)\n", i++, sq.x, sq.y); 
 		p = p->next_location_node;
 	}
 	return;
@@ -38,6 +44,7 @@ void insert_node(Request *request, location_node *l, int index){
     if(!path){
          (ridesharing_state.route).path = l;
          (ridesharing_state.route).path->next_location_node = NULL;
+         (ridesharing_state.route).path->prev_location_node = NULL; 
          (ridesharing_state.route).path->corresponding_request  = request;
          (ridesharing_state.route).no_of_nodes++;
          (ridesharing_state.route).path->index = index;
@@ -48,9 +55,10 @@ void insert_node(Request *request, location_node *l, int index){
         path = path->next_location_node;
 
     path->next_location_node = l;
-    path = path->next_location_node;
-    path->next_location_node = NULL;
-    path->corresponding_request = request;
+    l->prev_location_node = path;
+    l->next_location_node = NULL;
+    l->corresponding_request = request;
+    l->index = index;
     ridesharing_state.route.no_of_nodes++;
     path->index = index;
 
@@ -71,7 +79,18 @@ void update_route(location_node *before_worker){
     ridesharing_state.route.path = (location_node*)malloc(sizeof(location_node));
     (ridesharing_state.route.path)->sequenced_location = ridesharing_state.worker.current_location;
     (ridesharing_state.route.path)->next_location_node = traversal->next_location_node;
+    (ridesharing_state.route.path)->prev_location_node = NULL;
+    if(traversal->next_location_node){
+	    traversal->next_location_node->prev_location_node = ridesharing_state.route.path;
+    }
     (ridesharing_state.route.path)->index = 0;
+    int i = 1;
+    location_node *li = (ridesharing_state.route.path)->next_location_node;
+    while(li){
+	    li->index = i;
+	    i++;
+	    li = li->next_location_node;
+    }
     (ridesharing_state.route.path)->corresponding_request = NULL;
     ridesharing_state.route.no_of_nodes++;
 
@@ -120,7 +139,7 @@ void update_worker_route(Request *new_request){
 		    find_unit_vector(&unit_vector_ab, a->sequenced_location, b->sequenced_location);
 		    scale_aw = new_request->release_time - distance;
 		    scale_vector(&scaled_vector_aw, unit_vector_ab, scale_aw);
-		    add_vector(a->sequenced_location, scaled_vector_aw);
+		    add_vector(&ridesharing_state.worker.current_location, a->sequenced_location, scaled_vector_aw);
         }
 		// update route
         update_route(a);
@@ -138,73 +157,101 @@ void insertion_operator(Request *new_request){
 	
 	// Precalculation - pck, slk, thr, par, mobj
 	Precalculation_set precalculate_set;
-	precalculation(precalculate_set, *new_request);
-
+	precalculate(&precalculate_set, *new_request);
+	printf("Precalculation done\n");
 	// Displaying the route before insertion:
 	display_route(ridesharing_state.route);
 
 	// Segment tree construction:
 	ST st;
 	init_ST(&st);
-
-	double *st_arr = (double *) malloc(sizeof(double) * ridesharing_state.route.noOfNodes);
+	printf("Init segment tree done\n");
+	double *st_arr = (double *) malloc(sizeof(double) * ridesharing_state.route.no_of_nodes);
 	for(int i = 0; i < size; i++){
-		st_arr[i] = DBL_MAX;
+		st_arr[i] = INT_MAX;
 	}
 	construct_ST(&st, st_arr);
-
+	printf("construct sefment tree done\n");
 	li = ridesharing_state.route.path;
 	// Handling the case of i == j:
 	for(int i = 0; i < size; i++, li = li->next_location_node){
-                if(check_capacity_constraint_iEqualj(*new_request, precalculation_set.pck, i) && check_deadline_constraint_iEqualj(li, *new_request, precalculation_set.slk, i)){
-                        OBJ_NEW = obj_iEqualj(mobj, li, *new_request, i);
+		printf("i = %d\n", i);
+                if(check_capacity_constraint_iEqualj(*new_request, precalculate_set.pck, i) && check_deadline_constraint_iEqualj(li, *new_request, precalculate_set.slk, i)){
+
+                        OBJ_NEW = obj_iEqualj(precalculate_set.mobj, li, *new_request, i);
+			printf("i = j OBJNEW - %f\n", OBJ_NEW);
                         if(OBJ_NEW < OBJ_MIN){
                                 OBJ_MIN = OBJ_NEW;
                                 origin_i = li;
-                                dest_i = li;
+                                dest_j = li;
                         }
                 }
         }
-
+	printf("handled i=j cases\n");
         li = ridesharing_state.route.path;
+	while(li->next_location_node){
+		li = li->next_location_node;
+	}
+	li = li->prev_location_node;
 	double par_min;
-	double brk = size - 1;
-
+	int brk = size - 1;
+	int si;
+	double minimum_par = DBL_MAX;
 	// Iterating the i:
-	for(int i = size - 1; i >= 0; i--){
+	for(int i = size - 2; i >= 0; i--){
+		printf("i = %d\n", i);
 		// Updating leaf threshold with par in ST:
-		update_par(st, precalculation_set.par[i + 1], i + 1);
+		update_par(st, precalculate_set.par[i + 1], i + 1);
 
 		// Checking for the capacity constraint:
-		if(check_capacity_constraint(*new_request, precalculate_set.pck[i + 1], i + 1) == 0){
+		if(check_capacity_constraint(*new_request, precalculate_set.pck, i + 1) == 0){
 			invalidate(st, precalculate_set.par, &brk);
 		}
-
-		// Checking for the deadline constraint:
-		if(intial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
-			si = binary_search_thr(precalculate_set.thr, key, 0, size - 1);
-			par_min = min_par(st, si, size - 1);
+		else{
+			// Checking for the deadline constraint:
+			if(initial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
+				si = binary_search_thr(precalculate_set.thr, det(li, new_request->origin), 0, size - 1);
+				par_min = min_par(st, si, size - 1);
+			
+				// Calculating the objective:
+				OBJ_NEW = obj(precalculate_set.mobj, li, *new_request, par_min, size);
+				printf("OBJ_NEW - %f", OBJ_NEW);				
+				// updating (i*, j*) with (i, j) according to OBJ
+				if(OBJ_MIN > OBJ_NEW){
+					origin_i = li;
+					minimum_par = par_min;;
+					OBJ_MIN = OBJ_NEW;
+				}
+			}
 		}
-
-		// Calculating the objective:
-		OBJ_NEW = obj(precalculate_set.mobj, li, *new_request, min_par, size);
-		
-		// updating (i*, j*) with (i, j) according to OBJ
-		if(OBJ_MIN > OBJ_NEW){
-			origin_i = li;
-			dest_j = lj;
-			OBJ_MIN = OBJ_NEW;
+		li = li->prev_location_node;
+	}
+	if(minimum_par != DBL_MAX){
+		printf("par is not DBLMAX\n");
+		lj = ridesharing_state.route.path;
+		for(int j = 0; j < ridesharing_state.route.no_of_nodes; j++){
+			if(precalculate_set.par[j] == minimum_par){
+				dest_j = lj;
+				break;
+			}
+			lj = lj->next_location_node;
 		}
 	}
-
-	display_route(r);
-
+	if(origin_i)
+		insert(new_request->origin, origin_i);
+	else
+		return;
+	if(origin_i == dest_j){
+		insert(new_request->destination, new_request->origin);
+	}
+	else
+		insert(new_request->destination, dest_j);
 	return;
 }
 
 
 //New obj function
-double obj(double *mobj, location_node *li, Request new_request, double min_par, int noOfNodes){
+double obj(double *mobj, location_node *li, Request new_request, double par_min, int noOfNodes){
 	double cmp1, cmp2, cmp3;
 	int ind = li->index;
 	cmp1 = mobj[0];
@@ -214,8 +261,8 @@ double obj(double *mobj, location_node *li, Request new_request, double min_par,
 	else{
 		cmp2 = det(li, new_request.destination) + mobj[ind + 1];
 	}
-	cmp3 = det(li, new_request.destination) + min_par;
-	return max(cmp1, min(cmp2, cmp3));
+	cmp3 = det(li, new_request.destination) + par_min;
+	return max(cmp1, max(cmp2, cmp3));
 }
 
 

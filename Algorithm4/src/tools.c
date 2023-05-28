@@ -1,6 +1,6 @@
 #include "tools.h"
 #include "math.h"
-
+#include "global.h"
 /* a raise to b - a^b */
 double a_raise_b(double a, double b){
 		double result = a;

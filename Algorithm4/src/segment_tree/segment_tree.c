@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "segment_tree.h"
+#include "global.h"
+#include "tools.h"
 
 /*! initialization of segment tree */
 void init_ST(ST *st){
@@ -26,7 +28,8 @@ void construct_helper(double *st, int node, int start_index_thr, int end_index_t
 
 /*! construction of segment tree with initialization according given array*/
 void construct_ST(ST *st, double *arr){
-    st->size = ridesharing_state.route.size;
+    st->arr = (double *) malloc(sizeof(double) * 4 * ridesharing_state.route.no_of_nodes);
+    st->size = ridesharing_state.route.no_of_nodes;
     construct_helper(st->arr, 0, 0, st->size - 1);
     return;
 }
@@ -86,14 +89,14 @@ void display(ST st, int size){
             printf("\t");
         }
         for(j = a_raise_b(2, i) - 1; j < a_raise_b(2, i + 1) - 1; j++){
-            printf("%15.4f\t", st[j]);
+            printf("%15.4f\t", st.arr[j]);
         }
         printf("\n");
     }
 }
 
 /*! recurssive function for invalidate the node according to brk */
-void invalidate_node(double *st, int node, int par_j, int si, int ei){
+void invalidate_node(double *st, int node, double par_j, int si, int ei){
     if(si == ei){
         st[node] = INT_MAX;
         return;
@@ -112,8 +115,8 @@ void invalidate_node(double *st, int node, int par_j, int si, int ei){
 }
 
 /*! invalidate function */
-void invalidate(ST st, int *par, int *brk){
-    int par_j;
+void invalidate(ST st, double *par, int *brk){
+    double  par_j;
     par_j = par[*brk];
     invalidate_node(st.arr, 0, par_j, 0, 6);
     (*brk)--;

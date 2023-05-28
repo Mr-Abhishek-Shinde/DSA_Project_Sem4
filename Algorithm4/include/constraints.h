@@ -2,6 +2,8 @@
 
 #define CONSTRAINTS
 
+#include "structures.h"
+
 //New function for capacity for handling i=j cases
 int check_capacity_constraint_iEqualj(Request new_request, double *pck_values, int i);
 

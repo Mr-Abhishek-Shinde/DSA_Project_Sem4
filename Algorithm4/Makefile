@@ -1,6 +1,6 @@
 # paths in which make will search for files which are not present in current directory
 VPATH = src/segment_tree 		\
-		src/insert_operator 	\
+		src/insertion_operator	\
 		src
 
 # for preprocessing of header file
@@ -20,8 +20,8 @@ vpath %.h include
 
 #rules 
 
-result: constraints.o precalculation.o searching_and_sorting.o time_functions.o tools.o main.c
-	$(GCC) $(IFLAGS) $(^) $(FLAG) $@
+result: constraints.o precalculation.o searching_and_sorting.o time_functions.o tools.o insertion_operator.o ridesharing.o segment_tree.o main.c
+	$(GCC) $(IFLAGS) $(^) $(FLAG) $(-O) $@
 
 constraints.o: constraints.c
 precalculation.o: precalculation.c

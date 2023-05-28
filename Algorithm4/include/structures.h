@@ -50,6 +50,7 @@ typedef struct Worker{
 typedef struct location_node{
 		coordinate sequenced_location;
 		struct location_node *next_location_node;
+		struct location_node *prev_location_node;
 		struct Request *corresponding_request;
 		int index;    // it is for simplicity for precalculation - basically it is index of node
 }location_node; 
