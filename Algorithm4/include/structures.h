@@ -3,7 +3,7 @@
 #ifndef STRUCTURES
 
 #define STRUCTURES 
-
+#include <stdio.h>
 #define CAPACITY    (4)
 #define X_CORD      (0)
 #define Y_CORD      (4)   
@@ -68,8 +68,17 @@ typedef struct RideSharing_State{
     Worker worker;
 }RideSharing_State;
 
+typedef struct files{
+	FILE *prevRoute;
+	FILE *newRoute;
+	FILE *flowTime;
+}Files;
 
 void init_Ridesharing_State(RideSharing_State *ridesharing_state);
+void files_init();
+void insert_data_in_newroute_file();
+void insert_data_in_prevroute_file();
+void insert_value_in_flowtime_file(double);
 #endif
 
 

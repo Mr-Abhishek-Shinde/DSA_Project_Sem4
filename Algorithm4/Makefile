@@ -20,7 +20,7 @@ vpath %.h include
 
 #rules 
 
-result: constraints.o precalculation.o searching_and_sorting.o time_functions.o tools.o insertion_operator.o ridesharing.o segment_tree.o main.c
+result: constraints.o precalculation.o searching_and_sorting.o time_functions.o tools.o insertion_operator.o ridesharing.o segment_tree.o main.c 
 	$(GCC) $(IFLAGS) $(^) $(FLAG) $(-O) $@
 
 constraints.o: constraints.c

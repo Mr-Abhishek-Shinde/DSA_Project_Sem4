@@ -18,15 +18,10 @@
 void display_route(Route r){
 	location_node *p = r.path;
 	coordinate sq;
-	//request cr;
-	//for(int i = 0; i < r.no_of_nodes; i++){
-	int i = 0;
 	while(p){
-        /* printf("%p\n", p); */
 		sq = p->sequenced_location;
-		//cr = p.corresponding_request;
-		printf("Coordinates of %dth location node are: (%f, %f) index - %d \n", i++, sq.x, sq.y, p->index); 
 		p = p->next_location_node;
+		printf("x - %f\ty - %f\n", sq.x, sq.y);
 	}
 	return;
 }
@@ -84,13 +79,6 @@ void update_route(location_node *before_worker){
 	    traversal->next_location_node->prev_location_node = ridesharing_state.route.path;
     }
     (ridesharing_state.route.path)->index = 0;
-    int i = 1;
-    /*location_node *li = (ridesharing_state.route.path)->next_location_node;
-    while(li){
-	    li->index = i;
-	    i++;
-	    li = li->next_location_node;
-    }*/
     (ridesharing_state.route.path)->corresponding_request = NULL;
     ridesharing_state.route.no_of_nodes++;
 
@@ -158,31 +146,20 @@ void insertion_operator(Request *new_request){
 	// Precalculation - pck, slk, thr, par, mobj
 	Precalculation_set precalculate_set;
 	precalculate(&precalculate_set, *new_request);
-	printf("Precalculation done\n");
-	// Displaying the route before insertion:
-	display_route(ridesharing_state.route);
-
 	// Segment tree construction:
 	ST st;
 	init_ST(&st);
-	printf("Init segment tree done\n");
 	double *st_arr = (double *) malloc(sizeof(double) * ridesharing_state.route.no_of_nodes);
 	for(int i = 0; i < size; i++){
 		st_arr[i] = INT_MAX;
 	}
 	construct_ST(&st, st_arr);
-/*	printf("segment tree - \n");
-    	display(st, size);
-	printf("\n"); */
-	printf("construct segment tree done\n");
 	li = ridesharing_state.route.path;
 	// Handling the case of i == j:
 	for(int i = 0; i < size; i++, li = li->next_location_node){
-		printf("i = %d\n", i);
                 if(check_capacity_constraint_iEqualj(*new_request, precalculate_set.pck, i) && check_deadline_constraint_iEqualj(li, *new_request, precalculate_set.slk, i)){
 
                         OBJ_NEW = obj_iEqualj(precalculate_set.mobj, li, *new_request, i);
-			printf("i = j OBJNEW - %f\n", OBJ_NEW);
                         if(OBJ_NEW < OBJ_MIN){
                                 OBJ_MIN = OBJ_NEW;
                                 origin_i = li;
@@ -190,7 +167,6 @@ void insertion_operator(Request *new_request){
                         }
                 }
         }
-	printf("handled i=j cases\n");
         li = ridesharing_state.route.path;
 	while(li->next_location_node){
 		li = li->next_location_node;
@@ -202,14 +178,9 @@ void insertion_operator(Request *new_request){
 	double minimum_par = DBL_MAX;
 	// Iterating the i:
 	for(int i = size - 2; i >= 0; i--){
-		printf("i = %d\n", i);
 		// Updating leaf threshold with par in ST:
 		si = binary_search_thr(precalculate_set.sorted_thr, precalculate_set.thr[i + 1], 0, size - 1);
 		update_par(st, precalculate_set.par[i + 1], si);
-		display(st, size);
-/*		printf("segment tree %d - \n", i);
-    		display(st, size);
-		printf("\n");  */
 
 		// Checking for the capacity constraint:
 		if(check_capacity_constraint(*new_request, precalculate_set.pck, i + 1) == 0){
@@ -218,14 +189,11 @@ void insertion_operator(Request *new_request){
 		else{
 			// Checking for the deadline constraint:
 			if(initial_deadline_condition(*new_request, li, i, precalculate_set.slk) == 1){
-				printf("det : %f\t", det(li, new_request->origin));
 				si = binary_search_thr(precalculate_set.sorted_thr, det(li, new_request->origin), 0, size - 1);
 				par_min = min_par(st, si, size - 1);
-				printf("%d\t%d\t min par: %f\n", si, i, par_min);
-			
 				// Calculating the objective:
 				OBJ_NEW = obj(precalculate_set.mobj, li, *new_request, par_min, size);
-				printf("OBJ_NEW - %f", OBJ_NEW);				
+				insert_value_in_flowtime_file(OBJ_NEW);
 				// updating (i*, j*) with (i, j) according to OBJ
 				if(OBJ_MIN > OBJ_NEW){
 					origin_i = li;
@@ -237,7 +205,6 @@ void insertion_operator(Request *new_request){
 		li = li->prev_location_node;
 	}
 	if(minimum_par != DBL_MAX){
-		printf("par is not DBLMAX\n");
 		lj = ridesharing_state.route.path;
 		for(int j = 0; j < ridesharing_state.route.no_of_nodes; j++){
 			if(precalculate_set.par[j] == minimum_par){
@@ -256,6 +223,7 @@ void insertion_operator(Request *new_request){
 	}
 	else
 		insert(new_request->destination, dest_j);
+	insert_data_in_newroute_file();
 	return;
 }
 

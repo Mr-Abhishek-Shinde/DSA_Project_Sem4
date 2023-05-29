@@ -29,39 +29,11 @@ void malloc_precalculation_set(Precalculation_set *precalculate_set){
 void precalculate(Precalculation_set *precalculation_set, Request new_request){
 	malloc_precalculation_set(precalculation_set);
 	precalculate_slk(precalculation_set->slk, new_request);
-	printf("slk done - ");
-	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
-		printf("%f ", precalculation_set->slk[i]);
-	}
-	printf("\n");
 	precalculate_pck(precalculation_set->pck);
-	printf("slk and pck done\n");
 	precalculate_thr(precalculation_set->slk, precalculation_set->thr, new_request);
-	printf("thr done - ");
-	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
-		printf("%f ", precalculation_set->thr[i]);
-	}
-	printf("\n");
-
 	precalculate_mobj(precalculation_set->mobj, new_request);
-	printf("mobj done - ");
-	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
-		printf("%f ", precalculation_set->mobj[i]);
-	}
-	printf("\n");
 	precalculate_par(precalculation_set->par, precalculation_set->mobj, new_request);
-	printf("par done - ");
-	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
-		printf("%f ", precalculation_set->par[i]);
-	}
-	printf("\n");
 	precalculate_sorted_thr(precalculation_set->sorted_thr, precalculation_set->thr);
-	printf("sorted thre done - ");
-	for(int i = 0; i < ridesharing_state.route.no_of_nodes; i++){
-		printf("%f ", precalculation_set->sorted_thr[i]);
-	}
-	printf("\n");
-	printf("sorted thr done\n");
         return;
 }
 
@@ -134,7 +106,6 @@ void precalculate_mobj(double *mobj_values, Request new_request){
 }
 
 void precalculate_mobj_helper(location_node *li, double *mobj_values, Request new_request, int n, int i){
-	printf("i = %d\n", i);
 	if(i == n - 1){
 		mobj_values[i] = flow_time(*(li->corresponding_request), new_request);
 		return;

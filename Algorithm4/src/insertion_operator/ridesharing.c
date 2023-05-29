@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "insertion_operator.h"
 #include "global.h"
 
 void init_Ridesharing_State(RideSharing_State *ridesharing_state){
@@ -43,4 +44,37 @@ void init_request(Request *request, double orx, double ory, double drx, double d
     request->capacity = capacity;
 
     return;
+}
+
+void files_init(){
+	files.prevRoute = fopen("data/previous_route", "w");
+	files.newRoute = fopen("data/new_route", "w");
+	files.flowTime = fopen("data/flow_time", "w");
+	return;
+}
+
+void insert_data_in_newroute_file(){
+	location_node *p = ridesharing_state.route.path;
+	coordinate c;
+	while(p){
+		c = p->sequenced_location;
+		fprintf(files.newRoute, "%f,%f\n", c.x, c.y);
+		p = p->next_location_node;
+	}
+	return;
+}
+
+void insert_data_in_prevroute_file(){
+	location_node *p = ridesharing_state.route.path;
+	coordinate c;
+	while(p){
+		c = p->sequenced_location;
+		fprintf(files.prevRoute, "%f,%f\n", c.x, c.y);
+		p = p->next_location_node;
+	}
+	return;
+}
+void insert_value_in_flowtime_file(double obj){
+	fprintf(files.flowTime, "%f\n", obj);
+	return;
 }

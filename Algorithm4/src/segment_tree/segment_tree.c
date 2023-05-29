@@ -55,7 +55,6 @@ void update_par(ST st, double par, int index_to_insert){
 
 /* helper function for min par */
  double min_par_helper(double *st, int node, int start_index, int end_index, int si, int ei){
-    printf("node - %d, start_ind - %d, end_ind - %d, si - %d, ei - %d\n", node, start_index, end_index, si, ei);
     if(si <= start_index && ei >= end_index){
             return st[node];
     }
