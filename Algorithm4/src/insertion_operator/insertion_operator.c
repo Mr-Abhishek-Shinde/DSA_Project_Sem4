@@ -204,7 +204,9 @@ void insertion_operator(Request *new_request){
 	for(int i = size - 2; i >= 0; i--){
 		printf("i = %d\n", i);
 		// Updating leaf threshold with par in ST:
-		update_par(st, precalculate_set.par[i + 1], i + 1);
+		si = binary_search_thr(precalculate_set.sorted_thr, precalculate_set.thr[i + 1], 0, size - 1);
+		update_par(st, precalculate_set.par[i + 1], si);
+		display(st, size);
 /*		printf("segment tree %d - \n", i);
     		display(st, size);
 		printf("\n");  */

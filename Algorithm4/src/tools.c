@@ -3,6 +3,8 @@
 #include "global.h"
 /* a raise to b - a^b */
 double a_raise_b(double a, double b){
+		if(b == 0)
+			return 1;
 		double result = a;
 		for(int i = 0; i < (b - 1); i++){
 				result = result * a;

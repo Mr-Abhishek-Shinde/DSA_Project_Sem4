@@ -55,27 +55,32 @@ void update_par(ST st, double par, int index_to_insert){
 
 /* helper function for min par */
  double min_par_helper(double *st, int node, int start_index, int end_index, int si, int ei){
+    printf("node - %d, start_ind - %d, end_ind - %d, si - %d, ei - %d\n", node, start_index, end_index, si, ei);
     if(si <= start_index && ei >= end_index){
             return st[node];
     }
     double min_value = INT_MAX;
-    if(si >= start_index && si <= end_index){
-        min_value = min(min_value, min_par_helper(st, 2*node + 2, (start_index + end_index)/2 + 1, end_index, si, ei));
+    if(si >= start_index && si <= (start_index + end_index) / 2){
+        min_value = min(min_value, min_par_helper(st, 2*node + 1, start_index, (end_index + start_index) / 2, si, ei));
+    }
+    else if((si >= (start_index + end_index) / 2 + 1) && si <= end_index){
+       min_value = min(min_value, min_par_helper(st, 2*node + 2, (start_index + end_index) / 2 + 1, end_index, si, ei));
     }
     else if(si > end_index){
         return INT_MAX;
     }
-    if(ei >= start_index && ei <= end_index){
-        min_value = min(min_value, min_par_helper(st, 2*node + 1, start_index, (start_index + end_index)/2, si, ei));
+    if(ei >= start_index && ei <= (start_index + end_index)/2){
+        min_value = min(min_value, min_par_helper(st, 2*node + 1, start_index, (end_index + start_index) / 2, si, ei));
+    }
+    else if((ei >= (start_index + end_index) / 2 + 1) && ei <= end_index){
+        min_value = min(min_value, min_par_helper(st, 2*node + 2, (start_index + end_index) / 2 + 1, end_index, si, ei));
     }
     else if(ei < start_index){
         return INT_MAX;
     }
-    printf("$%f$\n", min_value);
 
     return min_value;
 }
-
 
 /*! returns min par(j) */
 double min_par(ST st, int si, int ei){

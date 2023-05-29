@@ -27,7 +27,7 @@ int main(){
     insert_node(&r2, r2.destination, 6);
     printf("Insert Node called successfully\n");
     display_route(ridesharing_state.route);
-    init_request(&newRequest, 4, 6, 6, 2, 2, 26, 1);
+    init_request(&newRequest, 10, 8, 11, 5, 2, 26, 1);
     update_worker_route(&newRequest);
     printf("Update worker called successfully\n");
     display_route(ridesharing_state.route);
