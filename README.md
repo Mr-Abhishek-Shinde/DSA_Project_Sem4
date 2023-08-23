@@ -33,6 +33,7 @@ The project employs the following data structures to achieve its objectives:
 ## Testing
 
 ![Test case and Output](./plot/route_plot1.png)
+
 *Used GNU Plot for plotting the coordinates of route.*
 
 
